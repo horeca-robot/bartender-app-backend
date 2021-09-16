@@ -31,7 +31,7 @@ To be made...
 ## 3. Building the docker image
 `./mvnw clean package`
 
-`docker build -t horecarobot:latest`
+`docker build -t horecarobot:latest .`
 
 If you want to run it / test it:
 
