@@ -23,10 +23,6 @@ jobs:
         with:
           mysql database: 'horeca'
           mysql root password: 'testpassword'
-      - name: Maven Package
-        run: mvn -B clean package -DskipTests
-      - name: Maven Verify
-        run: mvn -B clean verify
       - name: Create properties file
         run: |
           touch ./src/main/resources/application.properties
@@ -35,6 +31,10 @@ jobs:
           echo "spring.datasource.username=root" >> ./src/main/resources/application.properties
           echo "spring.datasource.password=testpassword" >> ./src/main/resources/application.properties
           echo "spring.datasource.driver-class-name=org.mariadb.jdbc.Driver" >> ./src/main/resources/application.properties
+      - name: Maven Package
+        run: mvn -B clean package -DskipTests
+      - name: Maven Verify
+        run: mvn -B clean verify
       - name: Checkout
         uses: actions/checkout@v2
       - name: Set up QEMU
