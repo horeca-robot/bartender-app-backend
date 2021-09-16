@@ -58,4 +58,4 @@ jobs:
           export DOCKER_BUILDKIT=0
           export COMPOSE_DOCKER_CLI_BUILD=0
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/horeca-backend:latest .
-          docker push horeca-backend:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/horeca-backend:latest
