@@ -27,3 +27,15 @@ Or use your IDE integration.
 ##  2. <a name='Pipeline'></a>Pipeline
 
 To be made...
+
+## 3. Building the docker image
+`./mvnw clean package`
+
+`docker build -t horecarobot:latest .`
+
+If you want to run it / test it:
+
+`docker-compose up -d --build`
+
+Credits:
+- wait_for_it script: https://github.com/vishnubob/wait-for-it
