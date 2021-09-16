@@ -52,3 +52,4 @@ jobs:
           context: .
           push: true
           tags: iqfx/horeca-backend:latest
+          build-args: DOCKER_BUILDKIT=0
