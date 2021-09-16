@@ -29,6 +29,8 @@ services:
       - "8080:8080"
     networks:
       - app-network
+    environment:
+      MYSQL_HOST: db
     depends_on:
       - db
 #Docker Networks
