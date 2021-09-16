@@ -31,8 +31,6 @@ jobs:
           echo "spring.datasource.username=root" >> ./src/main/resources/application.properties
           echo "spring.datasource.password=testpassword" >> ./src/main/resources/application.properties
           echo "spring.datasource.driver-class-name=org.mariadb.jdbc.Driver" >> ./src/main/resources/application.properties
-          export DOCKER_BUILDKIT=0
-          export COMPOSE_DOCKER_CLI_BUILD=0
       - name: Maven Package
         run: mvn -B clean package -DskipTests
       - name: Maven Verify
@@ -49,8 +47,8 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          push: true
-          tags: iqfx/horeca-backend:latest
+        run: |
+          export DOCKER_BUILDKIT=0
+          export COMPOSE_DOCKER_CLI_BUILD=0
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/horeca-backend:latest .
+          docker push horeca-backend:latest
