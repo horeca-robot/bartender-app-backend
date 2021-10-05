@@ -26,7 +26,7 @@ Or use your IDE integration.
 
 ##  2. <a name='Pipeline'></a>Pipeline
 
-To be made...
+Builds, tests and deploys new docker image to [docker hub](https://hub.docker.com/repository/docker/iqfx/horeca-backend).
 
 ## 3. Building the docker image
 `./mvnw clean package`
