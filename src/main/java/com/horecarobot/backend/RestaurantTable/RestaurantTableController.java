@@ -4,8 +4,8 @@ package com.horecarobot.backend.RestaurantTable;
 import edu.fontys.horecarobot.databaselibrary.models.RestaurantTable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "api/v1/restaurantTable")
@@ -21,6 +21,11 @@ public class RestaurantTableController {
     @GetMapping
     public List<RestaurantTable> getRestaurantTables() {
         return restaurantTableService.getRestaurantTables();
+    }
+
+    @GetMapping(path = "/{tableId}")
+    public RestaurantTable getRestaurantTable(@PathVariable("tableId") UUID id){
+        return this.restaurantTableService.getTable(id);
     }
 
     @PostMapping
