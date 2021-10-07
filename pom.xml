@@ -42,7 +42,7 @@
 		<dependency>
 			<groupId>com.github.horeca-robot</groupId>
 			<artifactId>database-library</artifactId>
-			<version>1.3</version>
+			<version>1.4</version>
 		</dependency>
 
 		<dependency>
