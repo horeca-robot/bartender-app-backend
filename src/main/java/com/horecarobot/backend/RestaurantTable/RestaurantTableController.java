@@ -23,8 +23,8 @@ public class RestaurantTableController {
         return restaurantTableService.getRestaurantTables();
     }
 
-    @GetMapping(path = "/{tableId}")
-    public RestaurantTable getRestaurantTable(@PathVariable("tableId") UUID id){
+    @GetMapping(path = "/{restaurantTableID}")
+    public RestaurantTable getRestaurantTable(@PathVariable("restaurantTableID") UUID id){
         return this.restaurantTableService.getTable(id);
     }
 

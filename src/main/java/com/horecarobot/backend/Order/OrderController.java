@@ -1,6 +1,5 @@
 package com.horecarobot.backend.Order;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import edu.fontys.horecarobot.databaselibrary.models.Order;
@@ -21,17 +20,22 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<Order> Orders() {
+    public List<Order> getOrders() {
         return orderService.getOrders();
     }
 
     @GetMapping(path = "/{orderUUID}")
-    public Optional<Order> getBankAccount(@PathVariable("orderUUID") String orderUUID) {
+    public Optional<Order> getBankAccount(@PathVariable("orderUUID") UUID orderUUID) {
         return orderService.getOrder(orderUUID);
     }
 
     @PostMapping
     public void createOrder(@RequestBody Order order) {
         orderService.addOrder(order);
+    }
+
+    @DeleteMapping(path = "{orderID}")
+    public void deleteOrder(@PathVariable("orderID") UUID orderID) {
+        orderService.deleteOrder(orderID);
     }
 }

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import edu.fontys.horecarobot.databaselibrary.models.Order;
 import org.springframework.stereotype.Service;
 
+import java.sql.ClientInfoStatus;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,9 +22,9 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
-    public Optional<Order> getOrder(String orderUUID) {
-
+    public Optional<Order> getOrder(UUID orderUUID) {
         Optional<Order> findOrder = orderRepository.findById(orderUUID);
+
         if (findOrder.isEmpty()) {
             throw new IllegalStateException(
                     "Order with id: " + orderUUID + " does not exist"
@@ -34,5 +35,16 @@ public class OrderService {
 
     public void addOrder(Order order) {
         orderRepository.save(order);
+    }
+
+    public void deleteOrder(UUID orderID) {
+        boolean findOrder = orderRepository.existsById(orderID);
+
+        if  (!findOrder) {
+            throw new IllegalStateException(
+                    "Order with id: " + orderID + " does not exist"
+            );
+        }
+        orderRepository.deleteById(orderID);
     }
 }
