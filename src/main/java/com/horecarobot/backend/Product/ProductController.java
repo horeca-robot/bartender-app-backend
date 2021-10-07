@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/api/v1/product")
+@CrossOrigin(origins = "http://localhost:8081")
 public class ProductController {
     private ProductService productService;
 
@@ -14,10 +15,13 @@ public class ProductController {
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
+
     @GetMapping
     public Iterable<Product> getAllProducts(){
         return this.productService.getAllProducts();
     }
+
+//    TEMP METHOD
     @PostMapping
     public void createProduct(@RequestBody Product product){
         productService.addProduct(product);
