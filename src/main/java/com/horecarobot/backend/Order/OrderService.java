@@ -1,10 +1,11 @@
 package com.horecarobot.backend.Order;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import edu.fontys.horecarobot.databaselibrary.models.Order;
+import edu.fontys.horecarobot.databaselibrary.models.RestaurantOrder;
+import edu.fontys.horecarobot.databaselibrary.repositories.OrderRepository;
+
 import org.springframework.stereotype.Service;
 
-import java.sql.ClientInfoStatus;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -18,22 +19,28 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-    public List<Order> getOrders() {
+    public List<RestaurantOrder> getOrders() {
         return orderRepository.findAll();
     }
 
-    public Optional<Order> getOrder(UUID orderUUID) {
-        Optional<Order> findOrder = orderRepository.findById(orderUUID);
-
-        if (findOrder.isEmpty()) {
-            throw new IllegalStateException(
-                    "Order with id: " + orderUUID + " does not exist"
-            );
-        }
+    public Optional<RestaurantOrder> getOrder(UUID orderUUID) {
         return orderRepository.findById(orderUUID);
     }
 
-    public void addOrder(Order order) {
+    public void addOrder(RestaurantOrder order) {
+        orderRepository.save(order);
+    }
+
+    public void updateOrder(RestaurantOrder order) {
+        UUID orderId = order.getId();
+        Optional<RestaurantOrder> existingOrder = orderRepository.findById(orderId);
+
+        if(existingOrder.isEmpty()) {
+            throw new IllegalStateException(
+                "Order with ID: " + orderId.toString() + " does not exist."
+            );
+        }
+
         orderRepository.save(order);
     }
 
