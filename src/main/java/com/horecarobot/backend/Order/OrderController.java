@@ -3,15 +3,18 @@ package com.horecarobot.backend.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.MissingRequestValueException;
 import org.springframework.web.bind.annotation.*;
+
+import edu.fontys.horecarobot.databaselibrary.enums.PaymentStatus;
 import edu.fontys.horecarobot.databaselibrary.models.RestaurantOrder;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "api/v1/order")
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "*")
 public class OrderController {
     private final OrderService orderService;
 
@@ -35,6 +38,11 @@ public class OrderController {
         }
         
         return retrievedOrder;
+    }
+
+    @GetMapping(path = "/statusses")
+    public List<PaymentStatus> getStatusses() {
+        return Arrays.asList(PaymentStatus.values());
     }
 
     @PostMapping

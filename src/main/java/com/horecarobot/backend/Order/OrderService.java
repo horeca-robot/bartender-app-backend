@@ -6,6 +6,7 @@ import edu.fontys.horecarobot.databaselibrary.repositories.OrderRepository;
 
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,6 +29,9 @@ public class OrderService {
     }
 
     public void addOrder(RestaurantOrder order) {
+        Date currentDate = new Date();
+        order.setCreated_at(currentDate);
+        
         orderRepository.save(order);
     }
 
