@@ -40,8 +40,13 @@ public class OrderController {
         return retrievedOrder;
     }
 
-    @GetMapping(path = "/statusses")
-    public List<PaymentStatus> getStatusses() {
+    @GetMapping(path = "/statusses/payment")
+    public List<PaymentStatus> getPaymentStatusses() {
+        return Arrays.asList(PaymentStatus.values());
+    }
+
+    @GetMapping(path = "/statusses/delivery")
+    public List<PaymentStatus> getDeliveryStatusses() {
         return Arrays.asList(PaymentStatus.values());
     }
 
