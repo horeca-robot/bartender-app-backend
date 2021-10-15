@@ -2,7 +2,7 @@ package com.horecarobot.backend.Order;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import edu.fontys.horecarobot.databaselibrary.models.RestaurantOrder;
-import edu.fontys.horecarobot.databaselibrary.repositories.OrderRepository;
+import edu.fontys.horecarobot.databaselibrary.repositories.RestaurantOrderRepository;
 
 import org.springframework.stereotype.Service;
 
@@ -13,10 +13,10 @@ import java.util.UUID;
 
 @Service
 public class OrderService {
-    private final OrderRepository orderRepository;
+    private final RestaurantOrderRepository orderRepository;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository) {
+    public OrderService(RestaurantOrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
 
