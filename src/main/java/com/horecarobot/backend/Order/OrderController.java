@@ -1,17 +1,23 @@
 package com.horecarobot.backend.Order;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.MissingRequestValueException;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import edu.fontys.horecarobot.databaselibrary.enums.PaymentStatus;
 import edu.fontys.horecarobot.databaselibrary.models.RestaurantOrder;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.horecarobot.backend.Views.BasicView;
+
 @RestController
 @RequestMapping(path = "api/v1/order")
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "*")
 public class OrderController {
     private final OrderService orderService;
 
@@ -37,22 +43,46 @@ public class OrderController {
         return retrievedOrder;
     }
 
+    @GetMapping(path = "/statusses/payment")
+    public List<PaymentStatus> getPaymentStatusses() {
+        return Arrays.asList(PaymentStatus.values());
+    }
+
+    @GetMapping(path = "/statusses/delivery")
+    public List<PaymentStatus> getDeliveryStatusses() {
+        return Arrays.asList(PaymentStatus.values());
+    }
+
     @PostMapping
-    public void createOrder(@RequestBody RestaurantOrder order) {
+    public BasicView createOrder(@RequestBody RestaurantOrder order) {
+        BasicView responseView = new BasicView();
+
         orderService.addOrder(order);
+        responseView.setMessage("Order successfully added.");
+
+        return responseView;
     }
 
     @PutMapping(path = "/{orderUUID}")
-    public void updateOrder(@PathVariable("orderUUID") UUID orderUUID, @RequestBody RestaurantOrder order) throws MissingRequestValueException, Exception {
+    public BasicView updateOrder(@PathVariable("orderUUID") UUID orderUUID, @RequestBody RestaurantOrder order) throws ResponseStatusException {
+        BasicView responseView = new BasicView();
+        
         if(order.getId() == null) {
-            throw new MissingRequestValueException("Field missing on order object: \"id\"");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Field missing on order object: \"id\"");
         }
         
         if (this.orderIdMatchesWithGivenId(orderUUID, order.getId())) {
-            throw new Exception("Field \"id\" on order object does not match the path ID");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Field \"id\" on order object does not match the path ID");
+        }
+
+        if(!this.orderWithIDExists(orderUUID)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Order with \"id\":" + orderUUID.toString() + " does not exist.");
         }
 
         orderService.updateOrder(order);
+        responseView.setMessage("Order successfully updated.");
+
+        return responseView;
     }
 
     @DeleteMapping(path = "{orderID}")
@@ -65,6 +95,16 @@ public class OrderController {
         String strGivenId = givenId.toString();
 
         if(strExpectedId != strGivenId) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean orderWithIDExists(UUID orderId) {
+        Optional<RestaurantOrder> order = this.orderService.getOrder(orderId);
+
+        if(order.isEmpty()) {
             return false;
         }
 

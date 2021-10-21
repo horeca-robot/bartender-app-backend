@@ -7,7 +7,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-
 @SpringBootApplication
 @ComponentScan({"edu.fontys.horecarobot.databaselibrary.*","com.horecarobot.backend.*"})
 @EnableJpaRepositories({"edu.fontys.horecarobot.databaselibrary.*","com.horecarobot.backend.*"})
