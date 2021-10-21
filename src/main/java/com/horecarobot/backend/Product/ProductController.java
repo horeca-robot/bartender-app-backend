@@ -5,11 +5,14 @@ import edu.fontys.horecarobot.databaselibrary.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @RestController
 @RequestMapping(path = "/api/v1/product")
 @CrossOrigin(origins = "http://localhost:8081")
 public class ProductController {
-    private ProductService productService;
+    private final ProductService productService;
 
     @Autowired
     public ProductController(ProductService productService) {
@@ -20,6 +23,9 @@ public class ProductController {
     public Iterable<Product> getAllProducts(){
         return this.productService.getAllProducts();
     }
+
+    @GetMapping(path ="/{id}")
+    public Optional<Product> getProduct(@PathVariable("id") UUID productID) { return this.productService.getProduct(productID); }
 
 //    TEMP METHOD
     @PostMapping
