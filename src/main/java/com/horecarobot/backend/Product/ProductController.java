@@ -5,6 +5,7 @@ import edu.fontys.horecarobot.databaselibrary.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,8 +21,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public Iterable<Product> getAllProducts(){
-        return this.productService.getAllProducts();
+    public List<Product> getAllProducts(){
+        return productService.getAllProducts();
     }
 
     @GetMapping(path ="/{id}")

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import edu.fontys.horecarobot.databaselibrary.models.Product;
 import edu.fontys.horecarobot.databaselibrary.repositories.ProductRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,13 +19,12 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public Iterable<Product> getAllProducts() {
+    public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
     public Optional<Product> getProduct(UUID productID) {
-        Optional<Product> product = productRepository.findById(productID);
-        return product;
+        return  productRepository.findById(productID);
     }
 
     public void addProduct(Product product) {

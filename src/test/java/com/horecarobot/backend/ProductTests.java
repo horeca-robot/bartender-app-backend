@@ -20,8 +20,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 public class ProductTests {
-    private ProductService productService;
-    private ProductRepository productRepository;
+    private final ProductService productService;
+    private final ProductRepository productRepository;
 
     @Autowired
     public ProductTests(ProductService productService, ProductRepository productRepository) {
@@ -45,16 +45,32 @@ public class ProductTests {
     @Test
     public void Should_Get_All_Products() {
         //Arrange
-        Product product1 = new Product(UUID.randomUUID(), "Cola", "imgPath", 1.50, 0, "This is the orignal Coca Cola!", false, null, null);
+        Product product = new Product(UUID.randomUUID(), "Cola", "imgPath", 1.50, 0, "This is the orignal Coca Cola!", false, null, null);
         Product product2 = new Product(UUID.randomUUID(), "Ice Tea", "imgPath", 1.50, 0, "Nice peach ice tea!", false, null, null);
 
-        productRepository.save(product1);
+        productRepository.save(product);
         productRepository.save(product2);
 
         //Act
-        Iterable<Product> products = productService.getAllProducts();
+        List<Product> products = productService.getAllProducts();
 
         //Assert
         assertThat(products).hasSize(2);
+    }
+
+    @Test
+    public void Should_Get_Chosen_Product() {
+        //Arrange
+        Product product = new Product(null, "Cola", "imgPath", 1.50, 0, "This is the orignal Coca Cola!", false, null, null);
+        Product product2 = new Product(null, "Ice Tea", "imgPath", 1.50, 0, "Nice peach ice tea!", false, null, null);
+
+        productRepository.save(product);
+        productRepository.save(product2);
+
+        //Act
+        Optional<Product> productToCheck = productService.getProduct(product.getId());
+
+        //Assert
+        assertThat(productToCheck).get().usingRecursiveComparison().isEqualTo(product);
     }
 }
