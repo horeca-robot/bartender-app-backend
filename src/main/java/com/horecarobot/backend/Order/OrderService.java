@@ -1,6 +1,6 @@
 package com.horecarobot.backend.Order;
 
-import edu.fontys.horecarobot.databaselibrary.repositories.RestaurantOrderRepository;
+import edu.fontys.horecarobot.databaselibrary.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import edu.fontys.horecarobot.databaselibrary.models.RestaurantOrder;
 
@@ -13,10 +13,10 @@ import java.util.UUID;
 
 @Service
 public class OrderService {
-    private final RestaurantOrderRepository orderRepository;
+    private final OrderRepository orderRepository;
 
     @Autowired
-    public OrderService(RestaurantOrderRepository orderRepository) {
+    public OrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
 
@@ -30,7 +30,7 @@ public class OrderService {
 
     public void addOrder(RestaurantOrder order) {
         Date currentDate = new Date();
-        order.setCreated_at(currentDate);
+        order.setCreatedAt(currentDate);
         
         orderRepository.save(order);
     }

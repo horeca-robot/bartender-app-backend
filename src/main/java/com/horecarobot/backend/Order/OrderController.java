@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import edu.fontys.horecarobot.databaselibrary.enums.PaymentStatus;
+import edu.fontys.horecarobot.databaselibrary.enums.OrderStatus;
 import edu.fontys.horecarobot.databaselibrary.models.RestaurantOrder;
 
 import java.util.Arrays;
@@ -43,14 +43,9 @@ public class OrderController {
         return retrievedOrder;
     }
 
-    @GetMapping(path = "/statusses/payment")
-    public List<PaymentStatus> getPaymentStatusses() {
-        return Arrays.asList(PaymentStatus.values());
-    }
-
     @GetMapping(path = "/statusses/delivery")
-    public List<PaymentStatus> getDeliveryStatusses() {
-        return Arrays.asList(PaymentStatus.values());
+    public List<OrderStatus> getDeliveryStatusses() {
+        return Arrays.asList(OrderStatus.values());
     }
 
     @PostMapping
