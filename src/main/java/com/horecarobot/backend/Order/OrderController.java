@@ -10,10 +10,8 @@ import edu.fontys.horecarobot.databaselibrary.models.RestaurantOrder;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.UUID;
-
-import com.horecarobot.backend.Views.BasicView;
 
 @RestController
 @RequestMapping(path = "api/v1/order")
@@ -33,14 +31,13 @@ public class OrderController {
     }
 
     @GetMapping(path = "/{orderUUID}")
-    public Optional<RestaurantOrder> getOrder(@PathVariable("orderUUID") UUID orderUUID) {
-        Optional<RestaurantOrder> retrievedOrder = orderService.getOrder(orderUUID);
+    public RestaurantOrder getOrder(@PathVariable("orderUUID") UUID orderUUID) {
 
-        if(retrievedOrder.isEmpty()) {
-            return null;
+        RestaurantOrder order = this.orderService.getOrder(orderUUID);
+        if(order == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Order with \"id\":" + orderUUID.toString() + " does not exist.");
         }
-        
-        return retrievedOrder;
+        return order;
     }
 
     @GetMapping(path = "/statusses/delivery")
@@ -49,19 +46,13 @@ public class OrderController {
     }
 
     @PostMapping
-    public BasicView createOrder(@RequestBody RestaurantOrder order) {
-        BasicView responseView = new BasicView();
-
+    public void createOrder(@RequestBody RestaurantOrder order) {
         orderService.addOrder(order);
-        responseView.setMessage("Order successfully added.");
-
-        return responseView;
     }
 
     @PutMapping(path = "/{orderUUID}")
-    public BasicView updateOrder(@PathVariable("orderUUID") UUID orderUUID, @RequestBody RestaurantOrder order) throws ResponseStatusException {
-        BasicView responseView = new BasicView();
-        
+    public void updateOrder(@PathVariable("orderUUID") UUID orderUUID, @RequestBody RestaurantOrder order) throws ResponseStatusException {
+
         if(order.getId() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Field missing on order object: \"id\"");
         }
@@ -70,14 +61,11 @@ public class OrderController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Field \"id\" on order object does not match the path ID");
         }
 
-        if(!this.orderWithIDExists(orderUUID)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Order with \"id\":" + orderUUID.toString() + " does not exist.");
+        if(this.orderService.getOrder(orderUUID) == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Order with \"id\":" + orderUUID.toString() + " does not exist.");
         }
 
         orderService.updateOrder(order);
-        responseView.setMessage("Order successfully updated.");
-
-        return responseView;
     }
 
     @DeleteMapping(path = "{orderID}")
@@ -88,21 +76,6 @@ public class OrderController {
     private boolean orderIdMatchesWithGivenId(UUID expectedId, UUID givenId) {
         String strExpectedId = expectedId.toString();
         String strGivenId = givenId.toString();
-
-        if(strExpectedId != strGivenId) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private boolean orderWithIDExists(UUID orderId) {
-        Optional<RestaurantOrder> order = this.orderService.getOrder(orderId);
-
-        if(order.isEmpty()) {
-            return false;
-        }
-
-        return true;
+        return Objects.equals(strExpectedId, strGivenId);
     }
 }

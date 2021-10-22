@@ -1,6 +1,8 @@
 package com.horecarobot.backend.Order;
 
 import edu.fontys.horecarobot.databaselibrary.repositories.OrderRepository;
+import javassist.NotFoundException;
+import edu.fontys.horecarobot.databaselibrary.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import edu.fontys.horecarobot.databaselibrary.models.RestaurantOrder;
 
@@ -24,8 +26,9 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
-    public Optional<RestaurantOrder> getOrder(UUID orderUUID) {
-        return orderRepository.findById(orderUUID);
+    public RestaurantOrder getOrder(UUID orderUUID) {
+        Optional<RestaurantOrder> order = this.orderRepository.findById(orderUUID);
+        return order.orElse(null);
     }
 
     public void addOrder(RestaurantOrder order) {
@@ -49,13 +52,14 @@ public class OrderService {
     }
 
     public void deleteOrder(UUID orderID) {
-        boolean findOrder = orderRepository.existsById(orderID);
-
-        if  (!findOrder) {
-            throw new IllegalStateException(
-                    "Order with id: " + orderID + " does not exist"
-            );
-        }
-        orderRepository.deleteById(orderID);
+        orderRepository.delete(this.orderExists(orderID));
     }
+    public RestaurantOrder orderExists(UUID orderID) {
+        Optional<RestaurantOrder> order = this.orderRepository.findById(orderID);
+        if(!order.isPresent()){
+            return null;
+        }
+        return order.get();
+    }
+
 }
