@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -31,14 +32,14 @@ public class ProductTests {
     @Test
     public void Should_Add_Product() throws Exception {
         //Arrange
-        UUID uuid = UUID.randomUUID();
-        Product product = new Product(uuid, "Cola", "imgPath", 1.50, 0, "This is the original Coca Cola!", false, null, null);
-        Product product2 = new Product(uuid, "Cola", "imgPath", 1.50, 0, "This is the original Coca Cola!", false, null, null);
+        Product product = new Product(null, "Cola", "imgPath", 1.50, 0, "This is the original Coca Cola!", false, null, null);
+        Product product2 = new Product(null, "Cola", "imgPath", 1.50, 0, "This is the original Coca Cola!", false, null, null);
 
         //Act
         productService.addProduct(product2);
+        product.setId(product2.getId());
 
-        assertThat(productRepository.findById(uuid)).usingRecursiveComparison().isEqualTo(product);
+        assertThat(productRepository.findAll().get(0)).usingRecursiveComparison().isEqualTo(product);
     }
 
     @Test
