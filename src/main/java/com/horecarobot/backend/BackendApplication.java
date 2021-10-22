@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@ComponentScan({"edu.fontys.horecarobot.databaselibrary.*","com.horecarobot.backend.*"})
+@ComponentScan({"edu.fontys.horecarobot.databaselibrary.*","com.horecarobot.backend.*","com.horecarobot.backend.ServiceErrorAdvice"})
 @EnableJpaRepositories({"edu.fontys.horecarobot.databaselibrary.*","com.horecarobot.backend.*"})
 @Import(SecurityConfig.class)
 @EntityScan("edu.fontys.horecarobot.databaselibrary.*")
