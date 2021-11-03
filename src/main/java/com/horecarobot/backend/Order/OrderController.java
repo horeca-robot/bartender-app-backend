@@ -30,9 +30,7 @@ public class OrderController {
     @GetMapping
     public List<RestaurantOrderDTO> getOrders() {
         List<RestaurantOrder> orders = orderService.getOrders();
-        List<ProductOrder> productOrders = orders.get(0).getProductOrders();
-        List<RestaurantOrderDTO> ordersDTOs = orders.stream().map(this::convertToDTO).collect(Collectors.toList());
-        return ordersDTOs;
+        return orders.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     @GetMapping(path = "/{orderUUID}")
