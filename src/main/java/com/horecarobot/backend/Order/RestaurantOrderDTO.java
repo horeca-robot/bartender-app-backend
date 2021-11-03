@@ -14,7 +14,7 @@ import java.util.UUID;
 public class RestaurantOrderDTO {
     private UUID id;
     private double subTotal;
-    private boolean payed;
+    private boolean paid;
     private Date createdAt;
     private RestaurantTable table;
 

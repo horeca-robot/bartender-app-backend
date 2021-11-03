@@ -1,6 +1,6 @@
 package com.horecarobot.backend.Order;
 
-import edu.fontys.horecarobot.databaselibrary.repositories.OrderRepository;
+import edu.fontys.horecarobot.databaselibrary.repositories.RestaurantOrderRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import edu.fontys.horecarobot.databaselibrary.models.RestaurantOrder;
@@ -11,35 +11,35 @@ import java.util.*;
 
 @Service
 public class OrderService {
-    private final OrderRepository orderRepository;
+    private final RestaurantOrderRepository restaurantOrderRepository;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
+    public OrderService(RestaurantOrderRepository orderRepository) {
+        this.restaurantOrderRepository = orderRepository;
     }
 
     public List<RestaurantOrder> getOrders() {
-        return orderRepository.findAll();
+        return restaurantOrderRepository.findAll();
     }
 
     public RestaurantOrder getOrder(UUID orderUUID) throws NotFoundException {
-        return this.orderRepository.findById(orderUUID).orElseThrow(() -> new NotFoundException("Cannot find object"));
+        return this.restaurantOrderRepository.findById(orderUUID).orElseThrow(() -> new NotFoundException("Cannot find object"));
     }
 
     public void addOrder(RestaurantOrder order) {
         Date currentDate = new Date();
         order.setCreatedAt(currentDate);
-        
-        orderRepository.save(order);
+
+        restaurantOrderRepository.save(order);
     }
 
     public void updateOrder(RestaurantOrder order) throws NotFoundException {
         this.getOrder(order.getId());
-        orderRepository.save(order);
+        restaurantOrderRepository.save(order);
     }
 
     public void deleteOrder(UUID orderID) throws NotFoundException {
-        orderRepository.delete(this.getOrder(orderID));
+        restaurantOrderRepository.delete(this.getOrder(orderID));
     }
 
 }
