@@ -18,6 +18,6 @@ public class RestaurantOrderDTO {
     private Date createdAt;
     private RestaurantTable table;
 
-    @JsonIgnoreProperties("restaurantOrder")
+    @JsonIgnoreProperties("order")
     private List<ProductOrder> productOrders = new ArrayList<>();
 }
