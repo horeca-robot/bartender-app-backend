@@ -3,8 +3,7 @@ name: Main Branch
 on:
   push:
     branches:
-      - 'main'
-
+      - '*'
 jobs:
 
   test:
