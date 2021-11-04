@@ -32,8 +32,8 @@ public class ProductTests {
     @Test
     public void Should_Add_Product() throws Exception {
         //Arrange
-        Product product = new Product(null, "Cola", "imgPath", 1.50, 0, "This is the original Coca Cola!", false, null, null);
-        Product product2 = new Product(null, "Cola", "imgPath", 1.50, 0, "This is the original Coca Cola!", false, null, null);
+        Product product = new Product(null, "Cola", "imgPath", 1.50, 0, "This is the original Coca Cola!", false, null, null, null);
+        Product product2 = new Product(null, "Cola", "imgPath", 1.50, 0, "This is the original Coca Cola!", false, null, null, null);
 
         //Act
         productService.addProduct(product2);
@@ -45,8 +45,8 @@ public class ProductTests {
     @Test
     public void Should_Get_All_Products() {
         //Arrange
-        Product product = new Product(UUID.randomUUID(), "Cola", "imgPath", 1.50, 0, "This is the orignal Coca Cola!", false, null, null);
-        Product product2 = new Product(UUID.randomUUID(), "Ice Tea", "imgPath", 1.50, 0, "Nice peach ice tea!", false, null, null);
+        Product product = new Product(UUID.randomUUID(), "Cola", "imgPath", 1.50, 0, "This is the orignal Coca Cola!", false, null, null, null);
+        Product product2 = new Product(UUID.randomUUID(), "Ice Tea", "imgPath", 1.50, 0, "Nice peach ice tea!", false, null, null, null);
 
         productRepository.save(product);
         productRepository.save(product2);
@@ -61,8 +61,8 @@ public class ProductTests {
     @Test
     public void Should_Get_Chosen_Product() {
         //Arrange
-        Product product = new Product(null, "Cola", "imgPath", 1.50, 0, "This is the orignal Coca Cola!", false, null, null);
-        Product product2 = new Product(null, "Ice Tea", "imgPath", 1.50, 0, "Nice peach ice tea!", false, null, null);
+        Product product = new Product(null, "Cola", "imgPath", 1.50, 0, "This is the orignal Coca Cola!", false, null, null, null);
+        Product product2 = new Product(null, "Ice Tea", "imgPath", 1.50, 0, "Nice peach ice tea!", false, null, null, null);
 
         productRepository.save(product);
         productRepository.save(product2);
