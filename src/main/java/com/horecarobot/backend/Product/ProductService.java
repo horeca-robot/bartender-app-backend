@@ -1,8 +1,14 @@
 package com.horecarobot.backend.Product;
 
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import edu.fontys.horecarobot.databaselibrary.models.Product;
+import edu.fontys.horecarobot.databaselibrary.repositories.ProductRepository;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 
 @Service
@@ -13,12 +19,17 @@ public class ProductService {
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
-    public Iterable<Product> getAllProducts()
-    {
+
+    public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
-    public void addProduct(Product product) {
+    public Product getProduct(UUID productID) throws NotFoundException {
+        return this.productRepository.findById(productID).orElseThrow(() -> new NotFoundException("Cannot find object"));
+    }
+
+    public void saveProduct(Product product) {
         productRepository.save(product);
     }
+
 }

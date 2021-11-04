@@ -1,38 +1,45 @@
 package com.horecarobot.backend.Order;
 
+import edu.fontys.horecarobot.databaselibrary.repositories.RestaurantOrderRepository;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import edu.fontys.horecarobot.databaselibrary.models.Order;
+import edu.fontys.horecarobot.databaselibrary.models.RestaurantOrder;
+
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class OrderService {
-    private final OrderRepository orderRepository;
+    private final RestaurantOrderRepository restaurantOrderRepository;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
+    public OrderService(RestaurantOrderRepository orderRepository) {
+        this.restaurantOrderRepository = orderRepository;
     }
 
-    public List<Order> getOrders() {
-        return orderRepository.findAll();
+    public List<RestaurantOrder> getOrders() {
+        return restaurantOrderRepository.findAll();
     }
 
-    public Optional<Order> getOrder(String orderUUID) {
-
-        Optional<Order> findOrder = orderRepository.findById(orderUUID);
-        if (findOrder.isEmpty()) {
-            throw new IllegalStateException(
-                    "Order with id: " + orderUUID + " does not exist"
-            );
-        }
-        return orderRepository.findById(orderUUID);
+    public RestaurantOrder getOrder(UUID orderUUID) throws NotFoundException {
+        return this.restaurantOrderRepository.findById(orderUUID).orElseThrow(() -> new NotFoundException("Cannot find object"));
     }
 
-    public void addOrder(Order order) {
-        orderRepository.save(order);
+    public void addOrder(RestaurantOrder order) {
+        Date currentDate = new Date();
+        order.setCreatedAt(currentDate);
+
+        restaurantOrderRepository.save(order);
     }
+
+    public void updateOrder(RestaurantOrder order) throws NotFoundException {
+        this.getOrder(order.getId());
+        restaurantOrderRepository.save(order);
+    }
+
+    public void deleteOrder(UUID orderID) throws NotFoundException {
+        restaurantOrderRepository.delete(this.getOrder(orderID));
+    }
+
 }

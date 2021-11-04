@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.fontys.horecarobot.databaselibrary.models.Category;
+import edu.fontys.horecarobot.databaselibrary.repositories.CategoryRepository;
 
 @Service
 public class CategoryService {
