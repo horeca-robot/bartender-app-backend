@@ -1,18 +1,18 @@
 package com.horecarobot.backend.Product;
 
 import edu.fontys.horecarobot.databaselibrary.models.Product;
+import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/api/v1/product")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:8081")
 public class ProductController {
     private final ProductService productService;
     private final ModelMapper modelMapper;
@@ -30,21 +30,16 @@ public class ProductController {
     }
 
     @GetMapping(path ="/{id}")
-    public ProductDTO getProduct(@PathVariable("id") UUID productID) {
-        Optional<Product> product = this.productService.getProduct(productID);
+    public ProductDTO getProduct(@PathVariable("id") UUID productID) throws NotFoundException {
+        Product product = this.productService.getProduct(productID);
+        return convertToDTO(product);
 
-        if (product.isEmpty()) {
-            return null;
-        }
-        Product presentProduct = product.get();
-
-        return convertToDTO(presentProduct);
     }
 
     @PostMapping
     public void createProduct(@RequestBody ProductDTO productDto){
         Product product = convertToEntity(productDto);
-        productService.addProduct(product);
+        productService.saveProduct(product);
     }
 
     // Mappers

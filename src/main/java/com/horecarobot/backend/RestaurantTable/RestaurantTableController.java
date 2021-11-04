@@ -3,6 +3,7 @@ package com.horecarobot.backend.RestaurantTable;
 import com.horecarobot.backend.Order.RestaurantOrderDTO;
 import edu.fontys.horecarobot.databaselibrary.models.RestaurantOrder;
 import edu.fontys.horecarobot.databaselibrary.models.RestaurantTable;
+import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class RestaurantTableController {
     }
 
     @GetMapping(path = "/{restaurantTableID}")
-    public RestaurantTableDTO getRestaurantTable(@PathVariable("restaurantTableID") UUID id){
+    public RestaurantTableDTO getRestaurantTable(@PathVariable("restaurantTableID") UUID id) throws NotFoundException {
         return convertToDTO(this.restaurantTableService.getTable(id));
     }
 
