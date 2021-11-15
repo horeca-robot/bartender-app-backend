@@ -1,5 +1,7 @@
 package com.horecarobot.backend.Order;
 
+import com.horecarobot.backend.Product.CreateOrderProductDTO;
+import edu.fontys.horecarobot.databaselibrary.models.Product;
 import edu.fontys.horecarobot.databaselibrary.models.ProductOrder;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import edu.fontys.horecarobot.databaselibrary.enums.OrderStatus;
 import edu.fontys.horecarobot.databaselibrary.models.RestaurantOrder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -44,8 +47,8 @@ public class OrderController {
     }
 
     @PostMapping
-    public void createOrder(@RequestBody RestaurantOrderDTO orderDTO) {
-        orderService.addOrder(convertToEntity(orderDTO));
+    public void createOrder(@RequestBody CreateRestaurantOrderDTO createOrderDTO) {
+        orderService.addOrder(convertCreateToEntity(createOrderDTO));
     }
 
     @PutMapping(path = "/{orderUUID}")
@@ -66,5 +69,24 @@ public class OrderController {
 
     private RestaurantOrderDTO convertToDTO(RestaurantOrder restaurantOrder) {
         return modelMapper.map(restaurantOrder, RestaurantOrderDTO.class);
+    }
+
+    private RestaurantOrder convertCreateToEntity(CreateRestaurantOrderDTO createRestaurantOrderDTO) {
+        RestaurantOrder order = new RestaurantOrder();
+        List<ProductOrder> orderProducts = new ArrayList<>();
+
+        order.setTable(createRestaurantOrderDTO.getTable());
+
+        for (CreateOrderProductDTO product : createRestaurantOrderDTO.getProducts()) {
+            for (int i = 0; i < product.getCount(); i++) {
+                ProductOrder newProductOrder = new ProductOrder();
+
+                newProductOrder.setProduct(modelMapper.map(product, Product.class));
+                orderProducts.add(newProductOrder);
+            }
+        }
+        order.setProductOrders(orderProducts);
+
+        return order;
     }
 }
