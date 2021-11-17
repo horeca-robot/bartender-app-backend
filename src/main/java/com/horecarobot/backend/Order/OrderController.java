@@ -47,14 +47,15 @@ public class OrderController {
     }
 
     @PostMapping
-    public void createOrder(@RequestBody CreateRestaurantOrderDTO createOrderDTO) {
-        orderService.addOrder(convertCreateToEntity(createOrderDTO));
+    public void createOrder(@RequestBody CreateRestaurantOrderDTO createOrderDTO) throws NotFoundException {
+        orderService.addOrder(convertCreateDTOToEntity(createOrderDTO));
     }
 
     @PutMapping(path = "/{orderUUID}")
-    public void updateOrder(@PathVariable("orderUUID") UUID orderUUID, @RequestBody RestaurantOrderDTO orderDTO) throws NotFoundException {
-        orderDTO.setId(orderUUID);
-        orderService.updateOrder(convertToEntity(orderDTO));
+    public void updateOrder(@PathVariable("orderUUID") UUID orderUUID, @RequestBody CreateRestaurantOrderDTO updateOrderDTO) throws NotFoundException {
+        RestaurantOrder order = convertCreateDTOToEntity(updateOrderDTO);
+        order.setId(orderUUID);
+        orderService.updateOrder(order);
     }
 
     @DeleteMapping(path = "{orderID}")
@@ -71,11 +72,17 @@ public class OrderController {
         return modelMapper.map(restaurantOrder, RestaurantOrderDTO.class);
     }
 
-    private RestaurantOrder convertCreateToEntity(CreateRestaurantOrderDTO createRestaurantOrderDTO) {
+    private RestaurantOrder convertCreateDTOToEntity(CreateRestaurantOrderDTO createRestaurantOrderDTO) throws NotFoundException {
         RestaurantOrder order = new RestaurantOrder();
-        List<ProductOrder> orderProducts = new ArrayList<>();
 
+        if (createRestaurantOrderDTO.getId() != null) {
+            order = this.orderService.getOrder(createRestaurantOrderDTO.getId());
+        }
+
+        order.setPaid(createRestaurantOrderDTO.isPaid());
         order.setTable(createRestaurantOrderDTO.getTable());
+
+        List<ProductOrder> orderProducts = new ArrayList<>();
 
         for (CreateOrderProductDTO product : createRestaurantOrderDTO.getProducts()) {
             for (int i = 0; i < product.getCount(); i++) {

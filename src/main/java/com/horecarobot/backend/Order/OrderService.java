@@ -34,20 +34,27 @@ public class OrderService {
     public void addOrder(RestaurantOrder order) {
         Date currentDate = new Date();
         order.setCreatedAt(currentDate);
-        double tempSubTotal = 0;
-
-        for(ProductOrder productOrder: order.getProductOrders()) {
-            productOrder.setOrderStatus(OrderStatus.OPEN_FOR_DELIVERY);
-            tempSubTotal += productRepository.getById(productOrder.getProduct().getId()).getPrice();
-        }
-        order.setSubTotal(tempSubTotal);
+        order.setSubTotal(calculateSubTotal(order));
 
         restaurantOrderRepository.save(order);
     }
 
     public void updateOrder(RestaurantOrder order) throws NotFoundException {
         this.getOrder(order.getId());
+        order.setSubTotal(calculateSubTotal(order));
+
         restaurantOrderRepository.save(order);
+    }
+
+    private double calculateSubTotal(RestaurantOrder order) {
+        double tempSubTotal = 0;
+
+        for(ProductOrder productOrder: order.getProductOrders()) {
+            productOrder.setOrderStatus(OrderStatus.OPEN_FOR_DELIVERY);
+            tempSubTotal += productRepository.getById(productOrder.getProduct().getId()).getPrice();
+        }
+
+        return tempSubTotal;
     }
 
     public void deleteOrder(UUID orderID) throws NotFoundException {
