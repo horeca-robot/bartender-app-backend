@@ -3,10 +3,6 @@ package TestEntities;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import edu.fontys.horecarobot.databaselibrary.models.ProductOrder;
 import edu.fontys.horecarobot.databaselibrary.models.RestaurantTable;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Temporal;

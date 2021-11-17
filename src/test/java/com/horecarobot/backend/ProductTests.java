@@ -33,7 +33,7 @@ public class ProductTests {
     }
 
     @Test
-    public void Should_Add_Product() throws Exception {
+    public void Should_Add_Product() {
         //Arrange
         Product product = new Product(null, "Cola", "imgPath", 1.50, 0, "This is the original Coca Cola!", false, null, null, null);
         Product product2 = new Product(null, "Cola", "imgPath", 1.50, 0, "This is the original Coca Cola!", false, null, null, null);
