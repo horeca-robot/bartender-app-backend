@@ -2,6 +2,7 @@ package com.horecarobot.backend;
 
 import com.horecarobot.backend.Product.ProductService;
 import edu.fontys.horecarobot.databaselibrary.models.Product;
+import edu.fontys.horecarobot.databaselibrary.models.RestaurantTable;
 import edu.fontys.horecarobot.databaselibrary.repositories.ProductRepository;
 import javassist.NotFoundException;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,8 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -72,5 +75,18 @@ public class ProductTests {
 
         //Assert
         assertThat(productToCheck).usingRecursiveComparison().isEqualTo(product);
+    }
+
+    @Test()
+    public void Should_Give_Not_Found_Exception_If_Product_Doesnt_Exist() {
+        //Arrange
+        UUID randomUUID = UUID.randomUUID();
+        Product product = new Product(null, "Cola", "imgPath", 1.50, 0, "This is the orignal Coca Cola!", false, null, null, null);
+        productRepository.save(product);
+
+        //Act
+        Exception exception = assertThrows(NotFoundException.class, () -> productService.getProduct(randomUUID));
+        //Assert
+        assertEquals(NotFoundException.class, exception.getClass());
     }
 }
