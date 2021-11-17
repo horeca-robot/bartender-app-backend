@@ -7,7 +7,6 @@ import edu.fontys.horecarobot.databaselibrary.models.Product;
 import edu.fontys.horecarobot.databaselibrary.repositories.ProductRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 
