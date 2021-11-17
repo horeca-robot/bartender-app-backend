@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import edu.fontys.horecarobot.databaselibrary.models.ProductOrder;
 import edu.fontys.horecarobot.databaselibrary.models.RestaurantTable;
 import lombok.Data;
-import org.hibernate.annotations.Cascade;
 
 import java.util.ArrayList;
 import java.util.Date;
