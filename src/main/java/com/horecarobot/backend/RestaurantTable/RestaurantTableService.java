@@ -17,7 +17,7 @@ public class RestaurantTableService {
         this.restaurantTableRepository = restaurantTableRepository;
     }
 
-    public RestaurantTable getTable(UUID id) throws NotFoundException {
+    public RestaurantTable getRestaurantTable(UUID id) throws NotFoundException {
         return this.restaurantTableRepository.findById(id).orElseThrow(() -> new NotFoundException("Cannot find object"));
     }
 
@@ -25,7 +25,7 @@ public class RestaurantTableService {
         return restaurantTableRepository.findAll();
     }
 
-    public void addRestTable(RestaurantTable restaurantTable) {
+    public void addRestaurantTable(RestaurantTable restaurantTable) {
         restaurantTableRepository.save(restaurantTable);
     }
 }
