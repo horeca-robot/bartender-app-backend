@@ -1,7 +1,5 @@
 package com.horecarobot.backend.RestaurantTable;
 
-import com.horecarobot.backend.Order.RestaurantOrderDTO;
-import edu.fontys.horecarobot.databaselibrary.models.RestaurantOrder;
 import edu.fontys.horecarobot.databaselibrary.models.RestaurantTable;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;

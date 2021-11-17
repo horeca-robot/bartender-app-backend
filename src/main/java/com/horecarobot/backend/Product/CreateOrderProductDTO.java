@@ -13,4 +13,14 @@ import java.util.UUID;
 public class CreateOrderProductDTO {
     private UUID id;
     private int count;
+    private String name;
+    private String image;
+    private double price;
+    private double discountPrice;
+    private String description;
+    private boolean containsAlcohol;
+    private List<Tag> tags = new ArrayList<>();
+
+    @JsonIgnoreProperties("product")
+    private List<IngredientProduct> ingredients;
 }
