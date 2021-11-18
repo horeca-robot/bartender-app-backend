@@ -33,7 +33,6 @@ public class ProductController {
     public ProductDTO getProduct(@PathVariable("id") UUID productID) throws NotFoundException {
         Product product = this.productService.getProduct(productID);
         return convertToDTO(product);
-
     }
 
     @PostMapping
