@@ -42,6 +42,11 @@ public class ProductController {
         productService.saveProduct(product);
     }
 
+    @DeleteMapping(path = "{productID}")
+    public void deleteProduct(@PathVariable("productID") UUID productID) throws NotFoundException {
+        productService.deleteProduct(productID);
+    }
+
     // Mappers
     private Product convertToEntity(ProductDTO productDTO) {
         return modelMapper.map(productDTO, Product.class);
