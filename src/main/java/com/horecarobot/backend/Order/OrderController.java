@@ -3,14 +3,15 @@ package com.horecarobot.backend.Order;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import edu.fontys.horecarobot.databaselibrary.enums.OrderStatus;
 import edu.fontys.horecarobot.databaselibrary.models.RestaurantOrder;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -27,9 +28,25 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<RestaurantOrderDTO> getOrders() {
-        List<RestaurantOrder> orders = orderService.getOrders();
-        return orders.stream().map(this::convertToDTO).collect(Collectors.toList());
+    public ResponseEntity<Map<String, Object>> getOrders(
+            @RequestParam(required = false,defaultValue = "0") int page,
+            @RequestParam(required = false,defaultValue = "2") int size
+    ) {
+
+        Page<RestaurantOrder> orders = orderService.getOrders(page, size);
+        List<RestaurantOrderDTO> orderDTOS = orders.stream().map(this::convertToDTO).collect(Collectors.toList());
+
+        if (orderDTOS.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("current", orders.getNumber());
+        response.put("total", orders.getTotalPages());
+        response.put("totalItems", orders.getTotalElements());
+        response.put("orders", orderDTOS);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping(path = "/{orderUUID}")
