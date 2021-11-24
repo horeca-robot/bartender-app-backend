@@ -1,20 +1,17 @@
 package com.horecarobot.backend.Order;
 
-import com.horecarobot.backend.Product.CreateOrderProductDTO;
-import edu.fontys.horecarobot.databaselibrary.models.Product;
-import edu.fontys.horecarobot.databaselibrary.models.ProductOrder;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import edu.fontys.horecarobot.databaselibrary.enums.OrderStatus;
 import edu.fontys.horecarobot.databaselibrary.models.RestaurantOrder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -31,9 +28,25 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<RestaurantOrderDTO> getOrders() {
-        List<RestaurantOrder> orders = orderService.getOrders();
-        return orders.stream().map(this::convertToDTO).collect(Collectors.toList());
+    public ResponseEntity<Map<String, Object>> getOrders(
+            @RequestParam(required = false,defaultValue = "0") int page,
+            @RequestParam(required = false,defaultValue = "2") int size
+    ) {
+
+        Page<RestaurantOrder> orders = orderService.getOrders(page, size);
+        List<RestaurantOrderDTO> orderDTOS = orders.stream().map(this::convertToDTO).collect(Collectors.toList());
+
+        if (orderDTOS.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("current", orders.getNumber());
+        response.put("total", orders.getTotalPages());
+        response.put("totalItems", orders.getTotalElements());
+        response.put("orders", orderDTOS);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping(path = "/{orderUUID}")
@@ -47,13 +60,13 @@ public class OrderController {
     }
 
     @PostMapping
-    public void createOrder(@RequestBody CreateRestaurantOrderDTO createOrderDTO) throws NotFoundException {
-        orderService.addOrder(convertCreateDTOToEntity(createOrderDTO));
+    public void createOrder(@RequestBody RestaurantOrderDTO createOrderDTO) {
+        orderService.addOrder(convertToEntity(createOrderDTO));
     }
 
     @PutMapping(path = "/{orderUUID}")
-    public void updateOrder(@PathVariable("orderUUID") UUID orderUUID, @RequestBody CreateRestaurantOrderDTO updateOrderDTO) throws NotFoundException {
-        RestaurantOrder order = convertCreateDTOToEntity(updateOrderDTO);
+    public void updateOrder(@PathVariable("orderUUID") UUID orderUUID, @RequestBody RestaurantOrderDTO updateOrderDTO) throws NotFoundException {
+        RestaurantOrder order = convertToEntity(updateOrderDTO);
         order.setId(orderUUID);
         orderService.updateOrder(order);
     }
@@ -70,30 +83,5 @@ public class OrderController {
 
     private RestaurantOrderDTO convertToDTO(RestaurantOrder restaurantOrder) {
         return modelMapper.map(restaurantOrder, RestaurantOrderDTO.class);
-    }
-
-    private RestaurantOrder convertCreateDTOToEntity(CreateRestaurantOrderDTO createRestaurantOrderDTO) throws NotFoundException {
-        RestaurantOrder order = new RestaurantOrder();
-
-        if (createRestaurantOrderDTO.getId() != null) {
-            order = this.orderService.getOrder(createRestaurantOrderDTO.getId());
-        }
-
-        order.setPaid(createRestaurantOrderDTO.isPaid());
-        order.setTable(createRestaurantOrderDTO.getTable());
-
-        List<ProductOrder> orderProducts = new ArrayList<>();
-
-        for (CreateOrderProductDTO product : createRestaurantOrderDTO.getProducts()) {
-            for (int i = 0; i < product.getCount(); i++) {
-                ProductOrder newProductOrder = new ProductOrder();
-
-                newProductOrder.setProduct(modelMapper.map(product, Product.class));
-                orderProducts.add(newProductOrder);
-            }
-        }
-        order.setProductOrders(orderProducts);
-
-        return order;
     }
 }

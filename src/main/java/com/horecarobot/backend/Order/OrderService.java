@@ -8,6 +8,8 @@ import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import edu.fontys.horecarobot.databaselibrary.models.RestaurantOrder;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -23,8 +25,8 @@ public class OrderService {
         this.productRepository = productRepository;
     }
 
-    public List<RestaurantOrder> getOrders() {
-        return restaurantOrderRepository.findAll();
+    public Page<RestaurantOrder> getOrders(int page, int size) {
+        return restaurantOrderRepository.findAll(PageRequest.of(page, size));
     }
 
     public RestaurantOrder getOrder(UUID orderUUID) throws NotFoundException {
@@ -35,6 +37,10 @@ public class OrderService {
         Date currentDate = new Date();
         order.setCreatedAt(currentDate);
         order.setSubTotal(calculateSubTotal(order));
+
+        for(ProductOrder productOrder: order.getProductOrders()) {
+            productOrder.setOrderStatus(OrderStatus.OPEN_FOR_DELIVERY);
+        }
 
         restaurantOrderRepository.save(order);
     }
@@ -50,7 +56,6 @@ public class OrderService {
         double tempSubTotal = 0;
 
         for(ProductOrder productOrder: order.getProductOrders()) {
-            productOrder.setOrderStatus(OrderStatus.OPEN_FOR_DELIVERY);
             tempSubTotal += productRepository.getById(productOrder.getProduct().getId()).getPrice();
         }
 
