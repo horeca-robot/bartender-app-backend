@@ -36,6 +36,10 @@ public class OrderService {
         order.setCreatedAt(currentDate);
         order.setSubTotal(calculateSubTotal(order));
 
+        for(ProductOrder productOrder: order.getProductOrders()) {
+            productOrder.setOrderStatus(OrderStatus.OPEN_FOR_DELIVERY);
+        }
+
         restaurantOrderRepository.save(order);
     }
 
@@ -50,7 +54,6 @@ public class OrderService {
         double tempSubTotal = 0;
 
         for(ProductOrder productOrder: order.getProductOrders()) {
-            productOrder.setOrderStatus(OrderStatus.OPEN_FOR_DELIVERY);
             tempSubTotal += productRepository.getById(productOrder.getProduct().getId()).getPrice();
         }
 
