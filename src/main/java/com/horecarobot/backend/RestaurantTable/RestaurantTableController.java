@@ -30,12 +30,12 @@ public class RestaurantTableController {
 
     @GetMapping(path = "/{restaurantTableID}")
     public RestaurantTableDTO getRestaurantTable(@PathVariable("restaurantTableID") UUID id) throws NotFoundException {
-        return convertToDTO(this.restaurantTableService.getTable(id));
+        return convertToDTO(this.restaurantTableService.getRestaurantTable(id));
     }
 
     @PostMapping
     public void createRestaurantTable(@RequestBody RestaurantTableDTO restaurantTableDTO) {
-        restaurantTableService.addRestTable(convertToEntity(restaurantTableDTO));
+        restaurantTableService.addRestaurantTable(convertToEntity(restaurantTableDTO));
     }
 
     // Mappers

@@ -65,5 +65,4 @@ public class OrderService {
     public void deleteOrder(UUID orderID) throws NotFoundException {
         restaurantOrderRepository.delete(this.getOrder(orderID));
     }
-
 }
