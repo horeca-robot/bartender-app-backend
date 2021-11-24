@@ -30,4 +30,3 @@ public class RestaurantTableService {
         restaurantTableRepository.save(restaurantTable);
     }
 }
-
