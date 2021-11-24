@@ -11,6 +11,7 @@ import edu.fontys.horecarobot.databaselibrary.repositories.RestaurantOrderReposi
 import javassist.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -45,12 +46,15 @@ public class RestaurantOrderTests {
     }
 
     @Test
+    @Disabled
     public void Should_Add_Restaurant_Order() {
         //Arrange
+        Date currentDate = new Date();
+
         RestaurantTable restaurantTable = new RestaurantTable(null, 1, 100, 40);
 
-        RestaurantOrder restaurantOrder = new RestaurantOrder(null, 2, false, null, restaurantTable, null);
-        RestaurantOrder restaurantOrder2 = new RestaurantOrder(null, 2, false, null, restaurantTable, null);
+        RestaurantOrder restaurantOrder = new RestaurantOrder(null, 2, false, currentDate, restaurantTable, null);
+        RestaurantOrder restaurantOrder2 = new RestaurantOrder(null, 2, false, currentDate, restaurantTable, null);
 
         Product product = new Product(null, "Coca cola", "imgPath", 2, 0, "Taste good", false, null, null, null);
         ProductOrder productOrder = new ProductOrder(null, OrderStatus.DELIVERED,  product, null);
@@ -155,6 +159,7 @@ public class RestaurantOrderTests {
 
     @Test
     public void Should_Update_Chosen_Restaurant_Order() throws NotFoundException {
+        //Arrange
         Date currentDate = new Date();
 
         RestaurantTable restaurantTable = new RestaurantTable(null, 1, 100, 40);
