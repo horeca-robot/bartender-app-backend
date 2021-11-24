@@ -33,13 +33,17 @@ public class ProductController {
     public ProductDTO getProduct(@PathVariable("id") UUID productID) throws NotFoundException {
         Product product = this.productService.getProduct(productID);
         return convertToDTO(product);
-
     }
 
     @PostMapping
     public void createProduct(@RequestBody ProductDTO productDto){
         Product product = convertToEntity(productDto);
         productService.saveProduct(product);
+    }
+
+    @DeleteMapping(path = "{productID}")
+    public void deleteProduct(@PathVariable("productID") UUID productID) throws NotFoundException {
+        productService.deleteProduct(productID);
     }
 
     // Mappers

@@ -31,4 +31,8 @@ public class ProductService {
         productRepository.save(product);
     }
 
+    public void deleteProduct(UUID productID) throws NotFoundException {
+        productRepository.delete(this.getProduct(productID));
+    }
+
 }
