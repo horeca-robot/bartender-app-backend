@@ -1,8 +1,5 @@
 package com.horecarobot.backend.Order;
 
-import com.horecarobot.backend.Product.CreateOrderProductDTO;
-import edu.fontys.horecarobot.databaselibrary.models.Product;
-import edu.fontys.horecarobot.databaselibrary.models.ProductOrder;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import edu.fontys.horecarobot.databaselibrary.enums.OrderStatus;
 import edu.fontys.horecarobot.databaselibrary.models.RestaurantOrder;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -47,13 +43,13 @@ public class OrderController {
     }
 
     @PostMapping
-    public void createOrder(@RequestBody CreateRestaurantOrderDTO createOrderDTO) throws NotFoundException {
-        orderService.addOrder(convertCreateDTOToEntity(createOrderDTO));
+    public void createOrder(@RequestBody RestaurantOrderDTO createOrderDTO) {
+        orderService.addOrder(convertToEntity(createOrderDTO));
     }
 
     @PutMapping(path = "/{orderUUID}")
-    public void updateOrder(@PathVariable("orderUUID") UUID orderUUID, @RequestBody CreateRestaurantOrderDTO updateOrderDTO) throws NotFoundException {
-        RestaurantOrder order = convertCreateDTOToEntity(updateOrderDTO);
+    public void updateOrder(@PathVariable("orderUUID") UUID orderUUID, @RequestBody RestaurantOrderDTO updateOrderDTO) throws NotFoundException {
+        RestaurantOrder order = convertToEntity(updateOrderDTO);
         order.setId(orderUUID);
         orderService.updateOrder(order);
     }
@@ -70,30 +66,5 @@ public class OrderController {
 
     private RestaurantOrderDTO convertToDTO(RestaurantOrder restaurantOrder) {
         return modelMapper.map(restaurantOrder, RestaurantOrderDTO.class);
-    }
-
-    private RestaurantOrder convertCreateDTOToEntity(CreateRestaurantOrderDTO createRestaurantOrderDTO) throws NotFoundException {
-        RestaurantOrder order = new RestaurantOrder();
-
-        if (createRestaurantOrderDTO.getId() != null) {
-            order = this.orderService.getOrder(createRestaurantOrderDTO.getId());
-        }
-
-        order.setPaid(createRestaurantOrderDTO.isPaid());
-        order.setTable(createRestaurantOrderDTO.getTable());
-
-        List<ProductOrder> orderProducts = new ArrayList<>();
-
-        for (CreateOrderProductDTO product : createRestaurantOrderDTO.getProducts()) {
-            for (int i = 0; i < product.getCount(); i++) {
-                ProductOrder newProductOrder = new ProductOrder();
-
-                newProductOrder.setProduct(modelMapper.map(product, Product.class));
-                orderProducts.add(newProductOrder);
-            }
-        }
-        order.setProductOrders(orderProducts);
-
-        return order;
     }
 }
