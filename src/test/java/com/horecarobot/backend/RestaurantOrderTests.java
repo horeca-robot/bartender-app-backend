@@ -10,16 +10,16 @@ import edu.fontys.horecarobot.databaselibrary.repositories.ProductRepository;
 import edu.fontys.horecarobot.databaselibrary.repositories.RestaurantOrderRepository;
 import javassist.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -45,12 +45,12 @@ public class RestaurantOrderTests {
     }
 
     @Test
-    @Disabled
     public void Should_Add_Restaurant_Order() {
         //Arrange
         RestaurantTable restaurantTable = new RestaurantTable(null, 1, 100, 40);
-        RestaurantOrder restaurantOrder = new RestaurantOrder(null, 10.50, false, null, restaurantTable, null);
-        RestaurantOrder restaurantOrder2 = new RestaurantOrder(null, 10.50, false, null, restaurantTable, null);
+
+        RestaurantOrder restaurantOrder = new RestaurantOrder(null, 2, false, null, restaurantTable, null);
+        RestaurantOrder restaurantOrder2 = new RestaurantOrder(null, 2, false, null, restaurantTable, null);
 
         Product product = new Product(null, "Coca cola", "imgPath", 2, 0, "Taste good", false, null, null, null);
         ProductOrder productOrder = new ProductOrder(null, OrderStatus.DELIVERED,  product, null);
@@ -61,6 +61,7 @@ public class RestaurantOrderTests {
         restaurantOrder.setProductOrders(productOrderList);
         restaurantOrder2.setProductOrders(productOrderList);
 
+        when(productRepository.getById(product.getId())).thenReturn(product);
         when(restaurantOrderRepository.save(restaurantOrder)).thenReturn(restaurantOrder);
 
         //Act
@@ -75,7 +76,9 @@ public class RestaurantOrderTests {
     public void Should_Get_All_Restaurant_Orders() {
         //Arrange
         RestaurantTable restaurantTable = new RestaurantTable(null, 1, 100, 40);
+
         List<RestaurantOrder> restaurantOrderList = new ArrayList<>();
+
         restaurantOrderList.add(new RestaurantOrder(null, 10.50, false, null, restaurantTable, null));
         restaurantOrderList.add(new RestaurantOrder(null, 10.50, false, null, restaurantTable, null));
 
@@ -88,20 +91,23 @@ public class RestaurantOrderTests {
         restaurantOrderList.get(0).setProductOrders(productOrderList);
         restaurantOrderList.get(1).setProductOrders(productOrderList);
 
-        when(restaurantOrderRepository.findAll()).thenReturn(restaurantOrderList);
+        Page<RestaurantOrder> pageRestaurantOrderList = new PageImpl<>(restaurantOrderList);
+
+        when(restaurantOrderRepository.findAll(PageRequest.of(0,5))).thenReturn(pageRestaurantOrderList);
 
         //Act
-        List<RestaurantOrder> emptyRestaurantOrderList = orderService.getOrders();
+        Page<RestaurantOrder> pageWithOrders = orderService.getOrders(0,5);
 
         //Assert
-        assertEquals(2, emptyRestaurantOrderList.size());
-        verify(restaurantOrderRepository, times(1)).findAll();
+        assertEquals(2, pageWithOrders.stream().count());
+        verify(restaurantOrderRepository, times(1)).findAll(PageRequest.of(0,5));
     }
 
     @Test
     public void Should_Get_Chosen_Restaurant_Orders() throws NotFoundException {
         //Arrange
         RestaurantTable restaurantTable = new RestaurantTable(null, 1, 100, 40);
+
         RestaurantOrder restaurantOrder = new RestaurantOrder(null, 10.50, false, null, restaurantTable, null);
 
         Product product = new Product(null, "Coca cola", "imgPath", 2, 0, "Taste good", false, null, null, null);
@@ -126,6 +132,7 @@ public class RestaurantOrderTests {
     public void Should_Delete_Chosen_Restaurant_Order() throws NotFoundException {
         //Arrange
         RestaurantTable restaurantTable = new RestaurantTable(null, 1, 100, 40);
+
         RestaurantOrder restaurantOrder = new RestaurantOrder(null, 10.50, false, null, restaurantTable, null);
 
         Product product = new Product(null, "Coca cola", "imgPath", 2, 0, "Taste good", false, null, null, null);
@@ -147,10 +154,12 @@ public class RestaurantOrderTests {
     }
 
     @Test
-    @Disabled
     public void Should_Update_Chosen_Restaurant_Order() throws NotFoundException {
+        Date currentDate = new Date();
+
         RestaurantTable restaurantTable = new RestaurantTable(null, 1, 100, 40);
-        RestaurantOrder restaurantOrder = new RestaurantOrder(null, 10.50, false, null, restaurantTable, null);
+
+        RestaurantOrder restaurantOrder = new RestaurantOrder(null, 2, false, currentDate, restaurantTable, null);
 
         Product product = new Product(null, "Coca cola", "imgPath", 2, 0, "Taste good", false, null, null, null);
         ProductOrder productOrder = new ProductOrder(null, OrderStatus.DELIVERED,  product, null);
@@ -160,15 +169,18 @@ public class RestaurantOrderTests {
 
         restaurantOrder.setProductOrders(productOrderList);
 
+        when(productRepository.getById(product.getId())).thenReturn(product);
         when(restaurantOrderRepository.findById(restaurantOrder.getId())).thenReturn(Optional.of(restaurantOrder));
         when(restaurantOrderRepository.save(restaurantOrder)).thenReturn(restaurantOrder);
 
-        restaurantOrder.setSubTotal(11.50);
+        RestaurantTable restaurantTableUpdate = new RestaurantTable(null, 2, 100, 40);
+
+        restaurantOrder.setTable(restaurantTableUpdate);
         //Act
         orderService.updateOrder(restaurantOrder);
 
         //Assert
-        assertEquals(11.50, restaurantOrder.getSubTotal());
+        assertEquals(2, restaurantOrder.getTable().getTableNumber());
     }
 
     @Test()
@@ -176,6 +188,7 @@ public class RestaurantOrderTests {
         //Arrange
         UUID randomUUID = UUID.randomUUID();
         RestaurantTable restaurantTable = new RestaurantTable(null, 1, 100, 40);
+
         RestaurantOrder restaurantOrder = new RestaurantOrder(null, 10.50, false, null, restaurantTable, null);
 
         Product product = new Product(null, "Coca cola", "imgPath", 2, 0, "Taste good", false, null, null, null);

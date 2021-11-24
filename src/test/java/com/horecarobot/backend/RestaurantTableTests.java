@@ -60,10 +60,10 @@ public class RestaurantTableTests {
         when(restaurantTableRepository.findAll()).thenReturn(restaurantTableList);
 
         //Act
-        List<RestaurantTable> emptyRestaurantTableList = restaurantTableService.getRestaurantTables();
+        List<RestaurantTable> listWithRestaurantTables = restaurantTableService.getRestaurantTables();
 
         //Assert
-        assertEquals(2, emptyRestaurantTableList.size());
+        assertEquals(2, listWithRestaurantTables.size());
         verify(restaurantTableRepository, times(1)).findAll();
     }
 

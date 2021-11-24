@@ -61,10 +61,10 @@ public class ProductTests {
         when(productRepository.findAll()).thenReturn(productList);
 
         //Act
-        List<Product> emptyProductList = productService.getAllProducts();
+        List<Product> listWithProducts = productService.getAllProducts();
 
         //Assert
-        assertEquals(2, emptyProductList.size());
+        assertEquals(2, listWithProducts.size());
         verify(productRepository, times(1)).findAll();
     }
 
