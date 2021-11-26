@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.UUID;
 import java.util.List;
 import java.util.ArrayList;
+
+import edu.fontys.horecarobot.databaselibrary.models.Category;
 import edu.fontys.horecarobot.databaselibrary.models.Tag;
 import edu.fontys.horecarobot.databaselibrary.models.IngredientProduct;
 import lombok.Data;
@@ -21,4 +23,7 @@ public class ProductDTO {
 
     @JsonIgnoreProperties("product")
     private List<IngredientProduct> ingredients;
+
+    @JsonIgnoreProperties("products")
+    private List<Category> categories = new ArrayList<>();
 }

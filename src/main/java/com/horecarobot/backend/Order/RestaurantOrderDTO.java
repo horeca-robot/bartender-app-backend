@@ -1,7 +1,7 @@
 package com.horecarobot.backend.Order;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import edu.fontys.horecarobot.databaselibrary.models.ProductOrder;
+import com.horecarobot.backend.Product.ProductOrderDTO;
 import edu.fontys.horecarobot.databaselibrary.models.RestaurantTable;
 import lombok.Data;
 
@@ -14,10 +14,10 @@ import java.util.UUID;
 public class RestaurantOrderDTO {
     private UUID id;
     private double subTotal;
-    private boolean paid;
+    private boolean paid = false;
     private Date createdAt;
     private RestaurantTable table;
 
     @JsonIgnoreProperties("order")
-    private List<ProductOrder> productOrders = new ArrayList<>();
+    private List<ProductOrderDTO> productOrders = new ArrayList<>();
 }

@@ -1,7 +1,5 @@
 package com.horecarobot.backend.RestaurantTable;
 
-import com.horecarobot.backend.Order.RestaurantOrderDTO;
-import edu.fontys.horecarobot.databaselibrary.models.RestaurantOrder;
 import edu.fontys.horecarobot.databaselibrary.models.RestaurantTable;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
@@ -32,12 +30,12 @@ public class RestaurantTableController {
 
     @GetMapping(path = "/{restaurantTableID}")
     public RestaurantTableDTO getRestaurantTable(@PathVariable("restaurantTableID") UUID id) throws NotFoundException {
-        return convertToDTO(this.restaurantTableService.getTable(id));
+        return convertToDTO(this.restaurantTableService.getRestaurantTable(id));
     }
 
     @PostMapping
     public void createRestaurantTable(@RequestBody RestaurantTableDTO restaurantTableDTO) {
-        restaurantTableService.addRestTable(convertToEntity(restaurantTableDTO));
+        restaurantTableService.addRestaurantTable(convertToEntity(restaurantTableDTO));
     }
 
     // Mappers

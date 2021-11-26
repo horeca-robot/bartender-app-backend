@@ -42,7 +42,7 @@
 		<dependency>
 			<groupId>com.github.horeca-robot</groupId>
 			<artifactId>database-library</artifactId>
-			<version>1.10</version>
+			<version>1.10.3-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
@@ -78,13 +78,15 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>1.4.194</version>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.4.2</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.4.2</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
