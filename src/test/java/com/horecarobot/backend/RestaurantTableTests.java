@@ -40,8 +40,6 @@ public class RestaurantTableTests {
         RestaurantTable restaurantTable = new RestaurantTable(null, 1, 100, 40);
         RestaurantTable restaurantTable2 = new RestaurantTable(null, 1, 100, 40);
 
-        when(restaurantTableRepository.save(restaurantTable)).thenReturn(restaurantTable);
-
         //Act
         restaurantTableService.addRestaurantTable(restaurantTable2);
 

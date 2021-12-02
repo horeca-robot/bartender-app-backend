@@ -41,8 +41,6 @@ public class ProductTests {
         Product product = new Product(null, "Cola", "imgPath", 1.50, 0, "This is the original Coca Cola!", false, null, null, null);
         Product product2 = new Product(null, "Cola", "imgPath", 1.50, 0, "This is the original Coca Cola!", false, null, null, null);
 
-        when(productRepository.save(product)).thenReturn(product);
-
         //Act
         productService.saveProduct(product2);
 

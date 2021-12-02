@@ -46,15 +46,12 @@ public class RestaurantOrderTests {
     }
 
     @Test
-    @Disabled
     public void Should_Add_Restaurant_Order() {
         //Arrange
-        Date currentDate = new Date();
-
         RestaurantTable restaurantTable = new RestaurantTable(null, 1, 100, 40);
 
-        RestaurantOrder restaurantOrder = new RestaurantOrder(null, 2, false, currentDate, restaurantTable, null);
-        RestaurantOrder restaurantOrder2 = new RestaurantOrder(null, 2, false, currentDate, restaurantTable, null);
+        RestaurantOrder restaurantOrder = new RestaurantOrder(null, 2, false, null, restaurantTable, null, true);
+        RestaurantOrder restaurantOrder2 = new RestaurantOrder(null, 2, false, null, restaurantTable, null, true);
 
         Product product = new Product(null, "Coca cola", "imgPath", 2, 0, "Taste good", false, null, null, null);
         ProductOrder productOrder = new ProductOrder(null, OrderStatus.DELIVERED,  product, null);
@@ -66,10 +63,10 @@ public class RestaurantOrderTests {
         restaurantOrder2.setProductOrders(productOrderList);
 
         when(productRepository.getById(product.getId())).thenReturn(product);
-        when(restaurantOrderRepository.save(restaurantOrder)).thenReturn(restaurantOrder);
 
         //Act
         orderService.addOrder(restaurantOrder2);
+        restaurantOrder.setCreatedAt(restaurantOrder2.getCreatedAt());
 
         //Arrange
         assertThat(restaurantOrder2).usingRecursiveComparison().isEqualTo(restaurantOrder);
@@ -83,8 +80,8 @@ public class RestaurantOrderTests {
 
         List<RestaurantOrder> restaurantOrderList = new ArrayList<>();
 
-        restaurantOrderList.add(new RestaurantOrder(null, 10.50, false, null, restaurantTable, null));
-        restaurantOrderList.add(new RestaurantOrder(null, 10.50, false, null, restaurantTable, null));
+        restaurantOrderList.add(new RestaurantOrder(null, 10.50, false, null, restaurantTable, null, true));
+        restaurantOrderList.add(new RestaurantOrder(null, 10.50, false, null, restaurantTable, null, true));
 
         Product product = new Product(null, "Coca cola", "imgPath", 2, 0, "Taste good", false, null, null, null);
         ProductOrder productOrder = new ProductOrder(null, OrderStatus.DELIVERED,  product, null);
@@ -112,7 +109,7 @@ public class RestaurantOrderTests {
         //Arrange
         RestaurantTable restaurantTable = new RestaurantTable(null, 1, 100, 40);
 
-        RestaurantOrder restaurantOrder = new RestaurantOrder(null, 10.50, false, null, restaurantTable, null);
+        RestaurantOrder restaurantOrder = new RestaurantOrder(null, 10.50, false, null, restaurantTable, null, true);
 
         Product product = new Product(null, "Coca cola", "imgPath", 2, 0, "Taste good", false, null, null, null);
         ProductOrder productOrder = new ProductOrder(null, OrderStatus.DELIVERED,  product, null);
@@ -137,7 +134,7 @@ public class RestaurantOrderTests {
         //Arrange
         RestaurantTable restaurantTable = new RestaurantTable(null, 1, 100, 40);
 
-        RestaurantOrder restaurantOrder = new RestaurantOrder(null, 10.50, false, null, restaurantTable, null);
+        RestaurantOrder restaurantOrder = new RestaurantOrder(null, 10.50, false, null, restaurantTable, null, true);
 
         Product product = new Product(null, "Coca cola", "imgPath", 2, 0, "Taste good", false, null, null, null);
         ProductOrder productOrder = new ProductOrder(null, OrderStatus.DELIVERED,  product, null);
@@ -164,7 +161,7 @@ public class RestaurantOrderTests {
 
         RestaurantTable restaurantTable = new RestaurantTable(null, 1, 100, 40);
 
-        RestaurantOrder restaurantOrder = new RestaurantOrder(null, 2, false, currentDate, restaurantTable, null);
+        RestaurantOrder restaurantOrder = new RestaurantOrder(null, 2, false, currentDate, restaurantTable, null, true);
 
         Product product = new Product(null, "Coca cola", "imgPath", 2, 0, "Taste good", false, null, null, null);
         ProductOrder productOrder = new ProductOrder(null, OrderStatus.DELIVERED,  product, null);
@@ -194,7 +191,7 @@ public class RestaurantOrderTests {
         UUID randomUUID = UUID.randomUUID();
         RestaurantTable restaurantTable = new RestaurantTable(null, 1, 100, 40);
 
-        RestaurantOrder restaurantOrder = new RestaurantOrder(null, 10.50, false, null, restaurantTable, null);
+        RestaurantOrder restaurantOrder = new RestaurantOrder(null, 10.50, false, null, restaurantTable, null, true);
 
         Product product = new Product(null, "Coca cola", "imgPath", 2, 0, "Taste good", false, null, null, null);
         ProductOrder productOrder = new ProductOrder(null, OrderStatus.DELIVERED,  product, null);
