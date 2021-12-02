@@ -12,6 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Change Wrapper permissions
+        run: chmod +x mvnw
+
       - name: Install Maven
         run: sudo apt-get update && sudo apt-get upgrade -y && sudo apt install maven -y
 
