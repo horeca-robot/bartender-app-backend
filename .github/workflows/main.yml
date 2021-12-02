@@ -12,12 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-
       - name: Setup Docker
         run: docker compose up --build -d
 
       - name: Install Maven
-        run: apt-get update && apt-get upgrade -y && apt install maven -y
+        run: sudo apt-get update && sudo apt-get upgrade -y && sudo apt install maven -y
 
       - name: Unit Tests
         run: docker compose exec -e SPRING_PROFILES_ACTIVE='docker' bartender-backend mvn test
