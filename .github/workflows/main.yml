@@ -16,6 +16,9 @@ jobs:
       - name: Setup Docker
         run: docker compose up --build -d
 
+      - name: Install Maven
+        run: apt-get update && apt-get upgrade -y && apt install maven -y
+
       - name: Unit Tests
         run: docker compose exec -e SPRING_PROFILES_ACTIVE='docker' bartender-backend mvn test
 
