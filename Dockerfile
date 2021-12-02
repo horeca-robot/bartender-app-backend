@@ -2,7 +2,11 @@ FROM openjdk:11 AS build
 
 COPY . ./
 
-RUN ./mvnw clean install -DskipTests
+RUN apt-get update && apt-get upgrade -y
+
+RUN apt install maven -y
+
+RUN mvn clean install -DskipTests
 
 FROM openjdk:11-jre-slim AS production
 
