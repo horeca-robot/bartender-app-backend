@@ -4,3 +4,5 @@ spring.datasource.username=root
 spring.datasource.password=password
 spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
 spring.datasource.continue-on-error=true
+
+horecarobot.jwt.secret=YOUR_SECRET_HERE

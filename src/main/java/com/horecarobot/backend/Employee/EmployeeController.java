@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.horecarobot.backend.Exceptions.ValueNotUniqueException;
+import com.horecarobot.backend.Exceptions.ValuesDontMatchException;
 import com.horecarobot.backend.Order.RestaurantOrderDTO;
 import edu.fontys.horecarobot.databaselibrary.models.RestaurantOrder;
 import javassist.NotFoundException;
@@ -62,6 +63,24 @@ public class EmployeeController {
     @PostMapping
     public void create(@RequestBody EmployeeUserDTO employeeDTO) throws ValueNotUniqueException {
         this.employeeService.add(this.convertToEntity(employeeDTO));
+    }
+
+    @PostMapping(path = "/{employeeUUID}/login")
+    public String login(
+            @RequestBody EmployeeUserDTO employeeUserDTO,
+            @PathVariable("employeeUUID") UUID employeeUUID
+    ) throws NotFoundException, ValuesDontMatchException {
+        employeeUserDTO.setId(employeeUUID);
+
+        return this.employeeService.login(this.convertToEntity(employeeUserDTO));
+    }
+
+    @PostMapping(path = "/{employeeUUID}/validate")
+    public String login(
+            @RequestBody String jwt,
+            @PathVariable("employeeUUID") UUID employeeUUID
+    ) {
+        return this.employeeService.validateJWT(jwt);
     }
 
     // Mappers

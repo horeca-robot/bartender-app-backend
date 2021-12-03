@@ -21,8 +21,8 @@ public class ServiceErrorAdvice {
         return error(INTERNAL_SERVER_ERROR, e);
     }
 
-    @ExceptionHandler({ ValueNotUniqueException.class })
-    public ResponseEntity<String> handleValueNotUniqueException(ValueNotUniqueException e) {
+    @ExceptionHandler({ ValueNotUniqueException.class, ValuesDontMatchException.class })
+    public ResponseEntity<String> handleBadRequestExceptions(Exception e) {
         return error(BAD_REQUEST, e);
     }
 
