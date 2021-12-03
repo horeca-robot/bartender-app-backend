@@ -1,7 +1,5 @@
 package com.horecarobot.backend.Employee;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.horecarobot.backend.Exceptions.ValueNotUniqueException;
 import com.horecarobot.backend.Exceptions.ValuesDontMatchException;
 import javassist.NotFoundException;
@@ -13,10 +11,6 @@ import org.springframework.stereotype.Service;
 import edu.fontys.horecarobot.databaselibrary.models.EmployeeUser;
 import edu.fontys.horecarobot.databaselibrary.repositories.EmployeeUserRepository;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,12 +18,10 @@ import java.util.UUID;
 public class EmployeeService {
     private final EmployeeUserRepository employeeUserRepository;
     private final PasswordEncoder passwordEncoder;
-    private final Algorithm jwtHashAlgorithm;
 
-    public EmployeeService(EmployeeUserRepository employeeUserRepository, PasswordEncoder passwordEncoder, Algorithm jwtHashAlgorithm) {
+    public EmployeeService(EmployeeUserRepository employeeUserRepository, PasswordEncoder passwordEncoder) {
         this.employeeUserRepository = employeeUserRepository;
         this.passwordEncoder = passwordEncoder;
-        this.jwtHashAlgorithm = jwtHashAlgorithm;
     }
 
     public Page<EmployeeUser> getAll(int page, int size) {
@@ -61,7 +53,7 @@ public class EmployeeService {
         this.employeeUserRepository.save(employee);
     }
 
-    public String login(EmployeeUser requestedEmployee) throws NotFoundException, ValuesDontMatchException {
+    public boolean login(EmployeeUser requestedEmployee) throws NotFoundException, ValuesDontMatchException {
         EmployeeUser employee = this.getByID(requestedEmployee.getId());
 
         if(!(employee.getUsername().equals(requestedEmployee.getUsername()))) {
@@ -72,43 +64,17 @@ public class EmployeeService {
             throw new ValuesDontMatchException("Username and pincode combination is not correct.");
         }
 
-        return this.createJWT(employee);
-    }
-
-    public String validateJWT(String token) {
-        return "";
+        return true;
     }
 
     private boolean employeeWithUsernameAlreadyExists(String username) {
         EmployeeUser employee = this.getEmployeeByUsername(username);
-
-        if(employee != null) {
-            return true;
-        }
-
-        return false;
+        return employee != null;
     }
 
     private boolean employeeWithPinCodeAlreadyExists(short pincode) {
         EmployeeUser employee = this.getEmployeeByPincode(pincode);
-
-        if(employee != null) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private String createJWT(EmployeeUser employee) {
-        Date expirationDate = new Date();
-        expirationDate.setTime(expirationDate.getTime() + (1000 * 60 * 60 * 1)); // Expires in 1 hour
-
-        return JWT.create()
-                .withIssuer("bartender-backend")
-                .withIssuedAt(new Date())
-                .withExpiresAt(expirationDate)
-                .withClaim("uid", employee.getId().toString())
-                .sign(this.jwtHashAlgorithm);
+        return employee != null;
     }
 
     // TODO:: This is just to make it work. I'm waiting until I can get employees by their pin code directly from the repository.
@@ -129,7 +95,7 @@ public class EmployeeService {
         List<EmployeeUser> employees = this.employeeUserRepository.findAll();
 
         for(EmployeeUser employee : employees) {
-            if(employee.getUsername() == username) {
+            if(employee.getUsername().equals(username)) {
                 return employee;
             }
         }

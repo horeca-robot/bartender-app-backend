@@ -1,5 +1,6 @@
 package com.horecarobot.backend.Exceptions;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import javassist.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class ServiceErrorAdvice {
         return error(INTERNAL_SERVER_ERROR, e);
     }
 
-    @ExceptionHandler({ ValueNotUniqueException.class, ValuesDontMatchException.class })
+    @ExceptionHandler({ ValueNotUniqueException.class, ValuesDontMatchException.class, JWTVerificationException.class })
     public ResponseEntity<String> handleBadRequestExceptions(Exception e) {
         return error(BAD_REQUEST, e);
     }
