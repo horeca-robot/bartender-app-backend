@@ -17,6 +17,7 @@ public class RestaurantOrderDTO {
     private boolean paid = false;
     private Date createdAt;
     private RestaurantTable table;
+    private boolean orderDone;
 
     @JsonIgnoreProperties("order")
     private List<ProductOrderDTO> productOrders = new ArrayList<>();
