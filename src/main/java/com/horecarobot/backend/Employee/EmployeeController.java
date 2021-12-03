@@ -6,10 +6,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.horecarobot.backend.Auth.AuthService;
 import com.horecarobot.backend.Exceptions.ValueNotUniqueException;
 import com.horecarobot.backend.Exceptions.ValuesDontMatchException;
-import com.horecarobot.backend.Order.RestaurantOrderDTO;
-import edu.fontys.horecarobot.databaselibrary.models.RestaurantOrder;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,16 +20,20 @@ import org.springframework.web.bind.annotation.*;
 
 import edu.fontys.horecarobot.databaselibrary.models.EmployeeUser;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping(path = "/api/v1/employee")
 @CrossOrigin(origins = "http://localhost:8081")
 public class EmployeeController {
     private final EmployeeService employeeService;
+    private final AuthService authService;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public EmployeeController(EmployeeService employeeService, ModelMapper modelMapper) {
+    public EmployeeController(EmployeeService employeeService, AuthService authService, ModelMapper modelMapper) {
         this.employeeService = employeeService;
+        this.authService = authService;
         this.modelMapper = modelMapper;
     }
 
@@ -72,15 +76,28 @@ public class EmployeeController {
     ) throws NotFoundException, ValuesDontMatchException {
         employeeUserDTO.setId(employeeUUID);
 
-        return this.employeeService.login(this.convertToEntity(employeeUserDTO));
+        if(this.employeeService.login(this.convertToEntity(employeeUserDTO))) {
+            Map<String, String> tokenClaims = new HashMap<String, String>();
+            tokenClaims.put("uid", employeeUserDTO.getId().toString());
+
+            return this.authService.createJWT(tokenClaims);
+        }
+
+        return null;
     }
 
     @PostMapping(path = "/{employeeUUID}/validate")
-    public String login(
-            @RequestBody String jwt,
+    public String validate(
+            @RequestBody Map<String, String> requestBody,
             @PathVariable("employeeUUID") UUID employeeUUID
-    ) {
-        return this.employeeService.validateJWT(jwt);
+    ) throws JWTVerificationException {
+        String jwt = requestBody.get("token");
+
+        if(this.authService.tokenIsValid(jwt, employeeUUID)) {
+            return "token valid";
+        }
+
+        return "token invalid";
     }
 
     // Mappers
