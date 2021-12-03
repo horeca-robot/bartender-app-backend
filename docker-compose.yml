@@ -1,0 +1,25 @@
+version: "3.4"
+
+services:
+  db:
+    image: mariadb
+    container_name: bartender-database
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MARIADB_DATABASE: "horecarobot_bartender_backend"
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "true"
+  bartender-backend:
+    depends_on:
+      - db
+    container_name: bartender-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: iqfx/horeca-backend:backend
+    environment:
+      spring.profiles.active: docker
+    ports:
+      - "8080:80"
