@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.horecarobot.backend.Auth.AuthService;
+import com.horecarobot.backend.Exceptions.FieldNotFoundException;
+import com.horecarobot.backend.Exceptions.InvalidTokenException;
 import com.horecarobot.backend.Exceptions.ValueNotUniqueException;
 import com.horecarobot.backend.Exceptions.ValuesDontMatchException;
 import javassist.NotFoundException;
@@ -90,14 +92,32 @@ public class EmployeeController {
     public String validate(
             @RequestBody Map<String, String> requestBody,
             @PathVariable("employeeUUID") UUID employeeUUID
-    ) throws JWTVerificationException {
-        String jwt = requestBody.get("token");
-
-        if(this.authService.tokenIsValid(jwt, employeeUUID)) {
-            return "token valid";
+    ) throws JWTVerificationException, FieldNotFoundException, InvalidTokenException {
+        if(!requestBody.containsKey("token")) {
+            throw new FieldNotFoundException("Missing field: 'token'");
         }
 
-        return "token invalid";
+        String jwt = requestBody.get("token");
+
+        if(!this.authService.tokenIsValid(jwt, employeeUUID)) {
+            throw new InvalidTokenException("Token is invalid");
+        }
+
+        return "Token is valid";
+    }
+
+    @PostMapping(path = "/{employeeUUID}/refresh")
+    public String refresh(
+            @RequestBody Map<String, String> requestBody,
+            @PathVariable("employeeUUID") UUID employeeUUID
+    ) throws JWTVerificationException, FieldNotFoundException, InvalidTokenException {
+        if(!requestBody.containsKey("token")) {
+            throw new FieldNotFoundException("Missing field: token");
+        }
+
+        String jwt = requestBody.get("token");
+
+        return this.authService.refreshToken(jwt, employeeUUID);
     }
 
     // Mappers
