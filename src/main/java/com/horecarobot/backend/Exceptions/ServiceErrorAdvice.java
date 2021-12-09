@@ -22,9 +22,14 @@ public class ServiceErrorAdvice {
         return error(INTERNAL_SERVER_ERROR, e);
     }
 
-    @ExceptionHandler({ ValueNotUniqueException.class, ValuesDontMatchException.class, JWTVerificationException.class })
+    @ExceptionHandler({ ValueNotUniqueException.class, ValuesDontMatchException.class, JWTVerificationException.class, FieldNotFoundException.class })
     public ResponseEntity<String> handleBadRequestExceptions(Exception e) {
         return error(BAD_REQUEST, e);
+    }
+
+    @ExceptionHandler({ InvalidTokenException.class })
+    public ResponseEntity<String> handleUnauthorizedExceptions(Exception e) {
+        return error(UNAUTHORIZED, e);
     }
 
     private ResponseEntity<String> error(HttpStatus status, Exception e) {

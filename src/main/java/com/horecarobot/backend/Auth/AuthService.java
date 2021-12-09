@@ -6,11 +6,10 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.horecarobot.backend.Exceptions.InvalidTokenException;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class AuthService {
@@ -50,7 +49,18 @@ public class AuthService {
         return true;
     }
 
+    public String refreshToken(String token, UUID givenUUID) throws InvalidTokenException {
+        if(!this.tokenIsValid(token, givenUUID)) {
+            throw new InvalidTokenException("Token is invalid");
+        }
 
+        DecodedJWT jwt = JWT.decode(token);
+        Map<String, String> claims = new HashMap<String, String>();
+
+        claims.put("uid", jwt.getClaim("uid").asString());
+
+        return this.createJWT(claims);
+    }
 
     private int getTokenExpirationTime() {
         return (1000 * 60 * 60 * 1);
