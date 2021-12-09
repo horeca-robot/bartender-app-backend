@@ -9,3 +9,4 @@ spring.datasource.hikari.minimum-idle= 0
 spring.datasource.hikari.initialization-fail-timeout= -1
 spring.sql.init.continue-on-error= true
 
+horecarobot.jwt.secret=YOUR_KEY_HERE
