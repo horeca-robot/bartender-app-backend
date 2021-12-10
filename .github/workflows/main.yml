@@ -60,5 +60,5 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             docker pull iqfx/horeca-backend:latest
-            docker restart iqfx/horeca-backend
+            docker restart horeca-backend
 
