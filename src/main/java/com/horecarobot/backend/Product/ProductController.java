@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/api/v1/product")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "https://horecarobot-frontend.azurewebsites.net/")
 public class ProductController {
     private final ProductService productService;
     private final ModelMapper modelMapper;
