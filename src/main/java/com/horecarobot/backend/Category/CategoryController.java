@@ -12,7 +12,6 @@ import edu.fontys.horecarobot.databaselibrary.models.Category;
 
 @RestController
 @RequestMapping(path = "/api/v1/category")
-@CrossOrigin(origins = "http://localhost:8081")
 public class CategoryController {
 
     private final CategoryService categoryService;

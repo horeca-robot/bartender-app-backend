@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(path = "/api/v1/employee")
-@CrossOrigin(origins = "https://horecarobot-frontend.azurewebsites.net/")
 public class EmployeeController {
     private final EmployeeService employeeService;
     private final AuthService authService;
