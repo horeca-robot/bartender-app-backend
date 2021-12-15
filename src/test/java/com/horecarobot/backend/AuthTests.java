@@ -95,7 +95,7 @@ public class AuthTests {
     }
 
     @Test
-    @Order(5)
+    @Order(6)
     public void checkIfCannotRefreshTokenWithoutUidClaim() throws InvalidTokenException {
         // Arrange
         String uuid = "c9ee25eb-2f26-4d30-a381-3547663bf197";
