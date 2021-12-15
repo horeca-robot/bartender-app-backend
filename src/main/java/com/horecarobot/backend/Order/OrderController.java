@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "api/v1/order")
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "https://horecarobot-frontend.azurewebsites.net/")
 public class OrderController {
     private final OrderService orderService;
     private final ModelMapper modelMapper;
