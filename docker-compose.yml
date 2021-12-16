@@ -6,8 +6,6 @@ services:
     container_name: bartender-database
     restart: unless-stopped
     tty: true
-    ports:
-      - "3306:3306"
     environment:
       MARIADB_DATABASE: "horecarobot_bartender_backend"
       MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "true"
