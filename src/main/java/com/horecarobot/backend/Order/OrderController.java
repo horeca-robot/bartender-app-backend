@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "api/v1/order")
-@CrossOrigin(origins = "http://localhost:8081")
 public class OrderController {
     private final OrderService orderService;
     private final ModelMapper modelMapper;

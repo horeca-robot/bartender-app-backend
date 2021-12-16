@@ -1,0 +1,12 @@
+spring.jpa.hibernate.ddl-auto=update
+spring.datasource.url=jdbc:mariadb://db:3306/db_name
+spring.datasource.username=root
+spring.datasource.password=
+spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+server.port=80
+#Wait 30seconds for database connection
+spring.datasource.hikari.minimum-idle= 0
+spring.datasource.hikari.initialization-fail-timeout= -1
+spring.sql.init.continue-on-error= true
+
+horecarobot.jwt.secret=YOUR_KEY_HERE

@@ -1,13 +1,12 @@
-name: Main Branch
+name: CI
 
 on:
   push:
     branches:
-      - '*'
-jobs:
+      - 'main'
 
-  test:
-    name: Unit Test
+jobs:
+  Unit_Test:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,11 +24,13 @@ jobs:
         run: |
           touch ./src/main/resources/application.properties
           echo "spring.jpa.hibernate.ddl-auto=update" >> ./src/main/resources/application.properties
-          echo "spring.datasource.url=jdbc:mysql://localhost:3306/horeca" >> ./src/main/resources/application.properties
-          echo "spring.datasource.username=root" >> ./src/main/resources/application.properties
-          echo "spring.datasource.password=testpassword" >> ./src/main/resources/application.properties
+          echo "spring.datasource.url=jdbc:mysql://iqfx.nl:5566/horecaBot" >> ./src/main/resources/application.properties
+          echo "spring.datasource.username=HorecaBotUser" >> ./src/main/resources/application.properties
+          echo "spring.datasource.password=${{ secrets.DB_PASSWORD }}" >> ./src/main/resources/application.properties
           echo "spring.datasource.continue-on-error=true" >> ./src/main/resources/application.properties
           echo "spring.datasource.driver-class-name=org.mariadb.jdbc.Driver" >> ./src/main/resources/application.properties
+          echo "horecarobot.jwt.secret=${{ JWT_SECRET }}" >> ./src/main/resources/application.properties
+          echo "server.port=80" >> ./src/main/resources/application.properties
       - name: Maven Package
         run: mvn -B clean package -DskipTests
       - name: Maven Verify
@@ -49,3 +50,15 @@ jobs:
           export COMPOSE_DOCKER_CLI_BUILD=0
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/horeca-backend:latest .
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/horeca-backend:latest
+
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            docker pull iqfx/horeca-backend:latest
+            docker-compose up -d
+

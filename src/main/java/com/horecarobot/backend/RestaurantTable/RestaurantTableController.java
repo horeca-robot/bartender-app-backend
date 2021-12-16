@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "api/v1/restaurantTable")
-@CrossOrigin(origins = "*")
 public class RestaurantTableController {
     private final RestaurantTableService restaurantTableService;
     private final ModelMapper modelMapper;
