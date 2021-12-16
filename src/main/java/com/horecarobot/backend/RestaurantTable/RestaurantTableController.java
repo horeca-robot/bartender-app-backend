@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "api/v1/restaurantTable")
+@CrossOrigin(origins = {"http://localhost:8080", "https://rigs.bryanaafjes.nl", "https://rigs.bryanaafjes.nl:444"})
 public class RestaurantTableController {
     private final RestaurantTableService restaurantTableService;
     private final ModelMapper modelMapper;
