@@ -39,7 +39,7 @@ public class OrderService {
         order.setSubTotal(calculateSubTotal(order));
 
         for(ProductOrder productOrder: order.getProductOrders()) {
-            productOrder.setOrderStatus(OrderStatus.OPEN_FOR_DELIVERY);
+            productOrder.setOrderStatus(OrderStatus.PREPARING);
         }
 
         restaurantOrderRepository.save(order);
