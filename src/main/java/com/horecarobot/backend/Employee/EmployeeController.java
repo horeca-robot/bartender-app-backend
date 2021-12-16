@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(path = "/api/v1/employee")
+@CrossOrigin(origins = {"http://localhost:8081", "https://rigs.bryanaafjes.nl", "https://rigs.bryanaafjes.nl:444"})
 public class EmployeeController {
     private final EmployeeService employeeService;
     private final AuthService authService;

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.fontys.horecarobot.databaselibrary.models.Category;
 
 @RestController
+@CrossOrigin(origins = {"http://localhost:8081", "https://rigs.bryanaafjes.nl", "https://rigs.bryanaafjes.nl:444"})
 @RequestMapping(path = "/api/v1/category")
 public class CategoryController {
 
