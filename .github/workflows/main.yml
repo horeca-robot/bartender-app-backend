@@ -29,7 +29,7 @@ jobs:
           echo "spring.datasource.password=${{ secrets.DB_PASSWORD }}" >> ./src/main/resources/application.properties
           echo "spring.datasource.continue-on-error=true" >> ./src/main/resources/application.properties
           echo "spring.datasource.driver-class-name=org.mariadb.jdbc.Driver" >> ./src/main/resources/application.properties
-          echo "horecarobot.jwt.secret=${{ JWT_SECRET }}" >> ./src/main/resources/application.properties
+          echo "horecarobot.jwt.secret=${{ secrets.JWT_SECRET }}" >> ./src/main/resources/application.properties
           echo "server.port=80" >> ./src/main/resources/application.properties
       - name: Maven Package
         run: mvn -B clean package -DskipTests

@@ -38,8 +38,8 @@ public class ProductTests {
     @Test
     public void Should_Add_Product() {
         //Arrange
-        Product product = new Product(null, "Cola", "imgPath", 1.50, 0, "This is the original Coca Cola!", false, null, null, null);
-        Product product2 = new Product(null, "Cola", "imgPath", 1.50, 0, "This is the original Coca Cola!", false, null, null, null);
+        Product product = new Product(null, "Cola", "imgPath", 1.50, 0, "This is the original Coca Cola!", false, false, null, null, null, null);
+        Product product2 = new Product(null, "Cola", "imgPath", 1.50, 0, "This is the original Coca Cola!", false, false, null, null, null, null);
 
         //Act
         productService.saveProduct(product2);
@@ -53,8 +53,8 @@ public class ProductTests {
     public void Should_Get_All_Products() {
         //Arrange
         List<Product> productList = new ArrayList<>();
-        productList.add(new Product(UUID.randomUUID(), "Cola", "imgPath", 1.50, 0, "This is the orignal Coca Cola!", false, null, null, null));
-        productList.add(new Product(UUID.randomUUID(), "Ice Tea", "imgPath", 1.50, 0, "Nice peach ice tea!", false, null, null, null));
+        productList.add(new Product(UUID.randomUUID(), "Cola", "imgPath", 1.50, 0, "This is the orignal Coca Cola!", false, false, null, null, null, null));
+        productList.add(new Product(UUID.randomUUID(), "Ice Tea", "imgPath", 1.50, 0, "Nice peach ice tea!", false, false, null, null, null, null));
 
         when(productRepository.findAll()).thenReturn(productList);
 
@@ -69,7 +69,7 @@ public class ProductTests {
     @Test
     public void Should_Get_Chosen_Product() throws NotFoundException {
         //Arrange
-        Product product = new Product(null, "Cola", "imgPath", 1.50, 0, "This is the orignal Coca Cola!", false, null, null, null);
+        Product product = new Product(null, "Cola", "imgPath", 1.50, 0, "This is the orignal Coca Cola!", false, false, null, null, null, null);
 
         when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
 
@@ -84,7 +84,7 @@ public class ProductTests {
     @Test
     public void Should_Delete_Chosen_Product() throws NotFoundException {
         //Arrange
-        Product product = new Product(null, "Cola", "imgPath", 1.50, 0, "This is the orignal Coca Cola!", false, null, null, null);
+        Product product = new Product(null, "Cola", "imgPath", 1.50, 0, "This is the orignal Coca Cola!", false,false, null, null, null, null);
 
         when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
 
@@ -100,7 +100,7 @@ public class ProductTests {
     public void Should_Give_Not_Found_Exception_If_Product_Doesnt_Exist() {
         //Arrange
         UUID randomUUID = UUID.randomUUID();
-        Product product = new Product(null, "Cola", "imgPath", 1.50, 0, "This is the orignal Coca Cola!", false, null, null, null);
+        Product product = new Product(null, "Cola", "imgPath", 1.50, 0, "This is the orignal Coca Cola!", false, false, null, null, null, null);
 
         when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
 
