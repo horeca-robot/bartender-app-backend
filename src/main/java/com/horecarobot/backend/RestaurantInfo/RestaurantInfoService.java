@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RestaurantInfoService {
-    private RestaurantInfoRepository restaurantInfoRepository;
+    private final RestaurantInfoRepository restaurantInfoRepository;
 
     @Autowired
     public RestaurantInfoService(RestaurantInfoRepository restaurantInfoRepository) {
