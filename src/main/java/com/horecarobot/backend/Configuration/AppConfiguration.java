@@ -29,7 +29,7 @@ public class AppConfiguration{
 
         config.addAllowedOrigin("http://localhost:8081");
         config.addAllowedOrigin("http://127.0.0.1:8081");
-        config.addAllowedOrigin("https://horecarobot-frontend.azurewebsites.net/");
+        config.addAllowedOrigin("https://rigs.bryanaafjes.nl:444/");
         config.addAllowedHeader("*");
         config.addAllowedMethod("OPTIONS");
         config.addAllowedMethod("HEAD");
