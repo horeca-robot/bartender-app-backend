@@ -23,18 +23,6 @@ public class AuthInterceptor implements HandlerInterceptor {
         // [IMPORTANT] The following code checks if an incoming request, with a valid token, can pass or not.
         String currentURL = request.getRequestURI();
 
-/*        System.out.println("---");
-
-        Enumeration<String> headerNames = request.getHeaderNames();
-        if(headerNames != null) {
-            while(headerNames.hasMoreElements()) {
-                String headerName = headerNames.nextElement();
-                System.out.println(headerName + " | " + request.getHeader(headerName));
-            }
-        }
-
-        System.out.println("---");*/
-
         if(currentURL.equals("/api/v1/employee") && List.of("GET", "OPTIONS").contains(request.getMethod())) {
             return true;
         }
