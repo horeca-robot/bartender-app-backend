@@ -13,7 +13,6 @@ public class RestaurantInfoService {
     @Autowired
     public RestaurantInfoService(RestaurantInfoRepository restaurantInfoRepository) {
         this.restaurantInfoRepository = restaurantInfoRepository;
-
     }
 
     public RestaurantInfo getAllRestaurantInfo() throws NotFoundException {
