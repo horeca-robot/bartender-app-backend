@@ -38,15 +38,15 @@ public class AuthService {
                 .withClaim("uid", givenUUID.toString())
                 .build();
 
-        DecodedJWT decodedToken = JWT.decode(token);
+        return this.getTokenValidStatus(tokenVerification, token);
+    }
 
-        try {
-            tokenVerification.verify(decodedToken);
-        } catch(JWTVerificationException exception) {
-            return false;
-        }
+    public boolean tokenIsValid(String token) {
+        JWTVerifier tokenVerification = JWT.require(this.jwtHashAlgorithm)
+                .withClaimPresence("uid")
+                .build();
 
-        return true;
+        return this.getTokenValidStatus(tokenVerification, token);
     }
 
     public String refreshToken(String token, UUID givenUUID) throws InvalidTokenException {
@@ -64,5 +64,17 @@ public class AuthService {
 
     private int getTokenExpirationTime() {
         return (1000 * 60 * 60 * 1);
+    }
+
+    private boolean getTokenValidStatus(JWTVerifier tokenVerification, String token) {
+        DecodedJWT decodedToken = JWT.decode(token);
+
+        try {
+            tokenVerification.verify(decodedToken);
+        } catch(JWTVerificationException exception) {
+            return false;
+        }
+
+        return true;
     }
 }
