@@ -14,7 +14,7 @@ public class ServiceErrorAdvice {
 
     @ExceptionHandler({ NotFoundException.class })
     public ResponseEntity<String> handleNotFoundException(NotFoundException e) {
-        return error(NOT_FOUND, e);
+        return error(NO_CONTENT, e);
     }
 
     @ExceptionHandler({ IllegalStateException.class })
