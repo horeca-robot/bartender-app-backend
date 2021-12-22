@@ -27,7 +27,7 @@ public class ServiceErrorAdvice {
         return error(BAD_REQUEST, e);
     }
 
-    @ExceptionHandler({ InvalidTokenException.class })
+    @ExceptionHandler({ InvalidTokenException.class, UnAuthorizedException.class })
     public ResponseEntity<String> handleUnauthorizedExceptions(Exception e) {
         return error(UNAUTHORIZED, e);
     }
