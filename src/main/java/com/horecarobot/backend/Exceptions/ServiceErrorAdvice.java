@@ -14,7 +14,7 @@ public class ServiceErrorAdvice {
 
     @ExceptionHandler({ NotFoundException.class })
     public ResponseEntity<String> handleNotFoundException(NotFoundException e) {
-        return error(NOT_FOUND, e);
+        return error(NO_CONTENT, e);
     }
 
     @ExceptionHandler({ IllegalStateException.class })
@@ -27,7 +27,7 @@ public class ServiceErrorAdvice {
         return error(BAD_REQUEST, e);
     }
 
-    @ExceptionHandler({ InvalidTokenException.class })
+    @ExceptionHandler({ InvalidTokenException.class, UnAuthorizedException.class })
     public ResponseEntity<String> handleUnauthorizedExceptions(Exception e) {
         return error(UNAUTHORIZED, e);
     }

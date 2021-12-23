@@ -26,7 +26,7 @@ public class OrderService {
     }
 
     public Page<RestaurantOrder> getOrders(int page, int size) {
-        return restaurantOrderRepository.findAll(PageRequest.of(page, size));
+        return restaurantOrderRepository.findAllByOrderByOrderDoneAscCreatedAtAsc(PageRequest.of(page, size));
     }
 
     public RestaurantOrder getOrder(UUID orderUUID) throws NotFoundException {

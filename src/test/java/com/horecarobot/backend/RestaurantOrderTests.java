@@ -94,14 +94,14 @@ public class RestaurantOrderTests {
 
         Page<RestaurantOrder> pageRestaurantOrderList = new PageImpl<>(restaurantOrderList);
 
-        when(restaurantOrderRepository.findAll(PageRequest.of(0,5))).thenReturn(pageRestaurantOrderList);
+        when(restaurantOrderRepository.findAllByOrderByOrderDoneAscCreatedAtAsc(PageRequest.of(0,5))).thenReturn(pageRestaurantOrderList);
 
         //Act
         Page<RestaurantOrder> pageWithOrders = orderService.getOrders(0,5);
 
         //Assert
         assertEquals(2, pageWithOrders.stream().count());
-        verify(restaurantOrderRepository, times(1)).findAll(PageRequest.of(0,5));
+        verify(restaurantOrderRepository, times(1)).findAllByOrderByOrderDoneAscCreatedAtAsc(PageRequest.of(0,5));
     }
 
     @Test
