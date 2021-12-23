@@ -27,6 +27,10 @@ public class AuthInterceptor implements HandlerInterceptor {
             return true;
         }
 
+        if(currentURL.equals("/api/v1/restaurantInfo") && List.of("GET", "OPTIONS").contains(request.getMethod())) {
+            return true;
+        }
+
         if(currentURL.matches("\\/api\\/v1\\/employee\\/[^\\/]+") && List.of("GET", "OPTIONS").contains(request.getMethod())) {
             return true;
         }
