@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import edu.fontys.horecarobot.databaselibrary.models.RestaurantOrder;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -26,7 +28,17 @@ public class OrderService {
     }
 
     public Page<RestaurantOrder> getOrders(int page, int size) {
-        return restaurantOrderRepository.findAllByOrderByOrderDoneAscCreatedAtAsc(PageRequest.of(page, size));
+//        Page<RestaurantOrder> orders =  restaurantOrderRepository.findAllByOrderByOrderDoneAscCreatedAtAsc(PageRequest.of(page, size));
+        List<RestaurantOrder> orders = restaurantOrderRepository.findAll();
+
+        orders.sort(new OrderCompareDate());
+        orders.sort(new OrderCompare());
+
+        Pageable paging = PageRequest.of(page, size);
+        int start = Math.min((int)paging.getOffset(), orders.size());
+        int end = Math.min((start + paging.getPageSize()), orders.size());
+
+        return new PageImpl<>(orders.subList(start, end), paging, orders.size());
     }
 
     public RestaurantOrder getOrder(UUID orderUUID) throws NotFoundException {
