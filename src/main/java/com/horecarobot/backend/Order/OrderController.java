@@ -35,7 +35,6 @@ public class OrderController {
 
         Page<RestaurantOrder> orders = orderService.getOrders(page, size);
         List<RestaurantOrderDTO> orderDTOS = orders.stream().map(this::convertToDTO).collect(Collectors.toList());
-        orderDTOS.sort(new OrderCompare());
         if (orderDTOS.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

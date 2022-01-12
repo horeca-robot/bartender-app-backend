@@ -4,10 +4,10 @@ import edu.fontys.horecarobot.databaselibrary.models.RestaurantOrder;
 
 import java.util.Comparator;
 
-public class OrderCompare implements Comparator<RestaurantOrderDTO> {
+public class OrderCompare implements Comparator<RestaurantOrder> {
 
     @Override
-    public int compare(RestaurantOrderDTO restaurantOrderDTO, RestaurantOrderDTO t1) {
+    public int compare(RestaurantOrder restaurantOrderDTO, RestaurantOrder t1) {
         if(restaurantOrderDTO.isOrderDone() && !t1.isOrderDone()){
             return  1;
         } else {
