@@ -89,18 +89,17 @@ public class RestaurantOrderTests {
         productOrderList.add(productOrder);
 
         restaurantOrderList.get(0).setProductOrders(productOrderList);
+        restaurantOrderList.get(0).setCreatedAt(new Date());
         restaurantOrderList.get(1).setProductOrders(productOrderList);
-
-        Page<RestaurantOrder> pageRestaurantOrderList = new PageImpl<>(restaurantOrderList);
-
-        when(restaurantOrderRepository.findAllByOrderByOrderDoneAscCreatedAtAsc(PageRequest.of(0,5))).thenReturn(pageRestaurantOrderList);
+        restaurantOrderList.get(1).setCreatedAt(new Date());
+        when(restaurantOrderRepository.findAll()).thenReturn(restaurantOrderList);
 
         //Act
         Page<RestaurantOrder> pageWithOrders = orderService.getOrders(0,5);
 
         //Assert
         assertEquals(2, pageWithOrders.stream().count());
-        verify(restaurantOrderRepository, times(1)).findAllByOrderByOrderDoneAscCreatedAtAsc(PageRequest.of(0,5));
+        verify(restaurantOrderRepository, times(1)).findAll();
     }
 
     @Test
