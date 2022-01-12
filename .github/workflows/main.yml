@@ -24,11 +24,12 @@ jobs:
         run: |
           touch ./src/main/resources/application.properties
           echo "spring.jpa.hibernate.ddl-auto=update" >> ./src/main/resources/application.properties
-          echo "spring.datasource.url=jdbc:mysql://iqfx.nl:5566/horecaBot" >> ./src/main/resources/application.properties
-          echo "spring.datasource.username=HorecaBotUser" >> ./src/main/resources/application.properties
+          echo "spring.datasource.url=${{ secrets.DB_URL }}" >> ./src/main/resources/application.properties
+          echo "spring.datasource.username=${{ secrets.DB_USERNAME }}" >> ./src/main/resources/application.properties
           echo "spring.datasource.password=${{ secrets.DB_PASSWORD }}" >> ./src/main/resources/application.properties
+          echo "useSSL=true&requireSSL=false" >> ./src/main/resources/application.properties
           echo "spring.datasource.continue-on-error=true" >> ./src/main/resources/application.properties
-          echo "spring.datasource.driver-class-name=org.mariadb.jdbc.Driver" >> ./src/main/resources/application.properties
+          echo "spring.datasource.driver-class-name=com.mysql.jdbc.Driver" >> ./src/main/resources/application.properties
           echo "horecarobot.jwt.secret=${{ secrets.JWT_SECRET }}" >> ./src/main/resources/application.properties
           echo "server.port=80" >> ./src/main/resources/application.properties
       - name: Maven Package
